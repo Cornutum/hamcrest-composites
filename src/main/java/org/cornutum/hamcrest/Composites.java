@@ -9,6 +9,7 @@ package org.cornutum.hamcrest;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Function;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -51,6 +52,14 @@ public final class Composites
     {
     Iterable<T> iterable = () -> expected;
     return containsMembers( iterable);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given collection of members in any order.
+   */
+  public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)
+    {
+    return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
     }
 
   /**
