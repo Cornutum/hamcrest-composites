@@ -10,6 +10,8 @@ package org.cornutum.hamcrest;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.hamcrest.Matchers;
+
 public class Drawing
   {
   private final String name;
@@ -139,6 +141,22 @@ public class Drawing
       return
         getClass().hashCode()
         ^ Objects.hashCode( getType());
+      }
+    }
+
+  /**
+   * A composite matcher for Drawing instances.
+   */
+  public static class DrawingMatcher extends BaseCompositeMatcher<Drawing>
+    {
+    /**
+     * Creates a new DrawingMatcher instance.
+     */
+    public DrawingMatcher( Drawing expected)
+      {
+      super( expected);
+      expectThat( "name", Drawing::getName, Matchers::equalTo);
+      expectThat( "elements", Drawing::getElements, Composites::containsMembers);
       }
     }
   }
