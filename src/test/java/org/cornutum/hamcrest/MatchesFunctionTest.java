@@ -8,12 +8,12 @@
 package org.cornutum.hamcrest;
 
 import static org.cornutum.hamcrest.Composites.*;
+import static org.cornutum.hamcrest.ExpectedFailure.*;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.stringContainsInOrder;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
@@ -29,21 +29,9 @@ public class MatchesFunctionTest
     Drawing expected = null;
     Drawing actual = null;
     
-    // When...
-    try
-      {
-      assertThat( "Null source", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
-      fail( "Expected failure not reported");
-      }
-
     // Then...
-    catch( IllegalArgumentException failure)
-      {
-      }
-    catch( Throwable t)
-      {
-      fail( "Unexpected failure: " + t);
-      }
+    expectFailure( IllegalArgumentException.class)
+      .when( () -> assertThat( "Null source", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)));;;
     }
 
   @Test
@@ -53,28 +41,17 @@ public class MatchesFunctionTest
     Drawing expected = new Drawing( "Empty");
     Drawing actual = null;
     
-    // When...
-    try
-      {
-      assertThat( "Null object", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
-      fail( "Expected failure not reported");
-      }
-
     // Then...
-    catch( AssertionError failure)
-      {
-      assertThat(
-        "Failure message",
-        failure.getMessage(),
-        stringContainsInOrder(
-          Arrays.asList(
-            "Expected: name=\"Empty\"",
-            "but: name can't be derived from a null object")));
-      }
-    catch( Throwable t)
-      {
-      fail( "Unexpected failure: " + t);
-      }
+    expectFailure()
+      .when( () -> assertThat( "Null object", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: name=\"Empty\"",
+                   "but: name can't be derived from a null object"))));
     }
 
   @Test
@@ -95,28 +72,17 @@ public class MatchesFunctionTest
     Drawing expected = new Drawing( null);
     Drawing actual = new Drawing( "Empty");
     
-    // When...
-    try
-      {
-      assertThat( "Null result", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
-      fail( "Expected failure not reported");
-      }
-
     // Then...
-    catch( AssertionError failure)
-      {
-      assertThat(
-        "Failure message",
-        failure.getMessage(),
-        stringContainsInOrder(
-          Arrays.asList(
-            "Expected: name=null",
-            "but: was \"Empty\"")));
-      }
-    catch( Throwable t)
-      {
-      fail( "Unexpected failure: " + t);
-      }
+    expectFailure()
+      .when( () -> assertThat( "Null result", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: name=null",
+                   "but: was \"Empty\""))));
     }
 
   @Test
@@ -126,28 +92,17 @@ public class MatchesFunctionTest
     Drawing expected = new Drawing( "Empty");
     Drawing actual = new Drawing( null);
     
-    // When...
-    try
-      {
-      assertThat( "Non-null result", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
-      fail( "Expected failure not reported");
-      }
-
     // Then...
-    catch( AssertionError failure)
-      {
-      assertThat(
-        "Failure message",
-        failure.getMessage(),
-        stringContainsInOrder(
-          Arrays.asList(
-            "Expected: name=\"Empty\"",
-            "but: was null")));
-      }
-    catch( Throwable t)
-      {
-      fail( "Unexpected failure: " + t);
-      }
+    expectFailure()
+      .when( () -> assertThat( "Non-null result", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: name=\"Empty\"",
+                   "but: was null"))));
     }
 
   @Test
@@ -168,27 +123,16 @@ public class MatchesFunctionTest
     Drawing expected = new Drawing( "Empty");
     Drawing actual = new Drawing( "Not Empty");
     
-    // When...
-    try
-      {
-      assertThat( "Names", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
-      fail( "Expected failure not reported");
-      }
-
     // Then...
-    catch( AssertionError failure)
-      {
-      assertThat(
-        "Failure message",
-        failure.getMessage(),
-        stringContainsInOrder(
-          Arrays.asList(
-            "Expected: name=\"Empty\"",
-            "but: was \"Not Empty\"")));
-      }
-    catch( Throwable t)
-      {
-      fail( "Unexpected failure: " + t);
-      }
+    expectFailure()
+      .when( () -> assertThat( "Names", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: name=\"Empty\"",
+                   "but: was \"Not Empty\""))));
     }
   }
