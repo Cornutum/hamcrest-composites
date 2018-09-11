@@ -7,13 +7,13 @@
 
 package org.cornutum.hamcrest;
 
+import static org.cornutum.hamcrest.CompositeUtils.*;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 
 /**
  * Defines methods to create composite matchers.
@@ -101,16 +101,15 @@ public final class Composites
     {
     if( !matcher.matches( actual))
       {
-      Description description =
-        new StringDescription()
-        .appendText( reason)
-        .appendText( "\nExpected: ")
-        .appendDescriptionOf( matcher)
-        .appendText( "\n     but: ");
+      StringBuilder mismatch =
+        new StringBuilder()
+        .append( reason)
+        .append( "\nExpected: ")
+        .append( descriptionOf( matcher))
+        .append( "\n     but: ")
+        .append( mismatchFor( matcher, actual));
 
-      matcher.describeMismatch( actual, description);
-            
-      throw new AssertionError( description.toString());
+      throw new AssertionError( mismatch.toString());
       }
     }
 }

@@ -7,6 +7,8 @@
 
 package org.cornutum.hamcrest;
 
+import static org.cornutum.hamcrest.CompositeUtils.*;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
@@ -15,7 +17,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 import static java.util.stream.Collectors.toList;
 
 
@@ -24,7 +25,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
   {
-  private List<T> expectedMembers;
+  private final List<T> expectedMembers;
   private MemberMatcher memberMatcher;
 
   /**
@@ -147,10 +148,10 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
    */
   public ContainsMembers( Iterable<? extends T> expected)
     {
-    if( expected != null)
-      {
-      expectedMembers = StreamSupport.stream( expected.spliterator(), false).collect( toList());
-      }
+    expectedMembers =
+      expected == null
+      ? null
+      : streamFor( expected).collect( toList());
     }
 
   public boolean matches( Object actual)

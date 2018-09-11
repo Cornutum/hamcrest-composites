@@ -7,10 +7,11 @@
 
 package org.cornutum.hamcrest;
 
+import static org.cornutum.hamcrest.CompositeUtils.*;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.StringDescription;
 import org.hamcrest.core.IsNull;
 
 import java.util.Optional;
@@ -55,9 +56,7 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
         }
       else if( !resultMatcher.matches( (actualResult = function.apply( (T) object))))
         {
-        Description description = new StringDescription();
-        resultMatcher.describeMismatch( actualResult, description);
-        mismatch.append( description.toString());
+        mismatch.append( mismatchFor( resultMatcher, actualResult));
         }
       }
 
