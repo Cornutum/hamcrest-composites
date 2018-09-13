@@ -87,7 +87,7 @@ public final class Composites
     }
 
   /**
-   * Returns a Matcher for an Iterable containing the given collection of members in any order.
+   * Returns a Matcher that compares values of the given function, using a result Matcher returned by the given supplier.
    */
   public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)
     {

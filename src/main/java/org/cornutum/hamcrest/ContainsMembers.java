@@ -24,6 +24,11 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * Matches an Iterable containing a specified collection of members in any order.
+ * <P/>
+ * Optionally, given a "member Matcher supplier" function, applies additional detailed match conditions for
+ * Iterable members.  First, for each member of the expected Iterable, a member-specific Matcher is derived by the
+ * given supplier function.  Then each member of a matched Iterable must satisfy the member-specific
+ * Matcher returned for its <CODE>equals</CODE>-matching counterpart in the given expected Iterable.
  */
 public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
   {

@@ -19,7 +19,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Applies a sequence of Matchers to a single object.
+ * Base class for a Matcher that applies a sequence of Matchers to a single object.
+ * <P/>
+ * To define a "deep match" between two instances of type <CODE>T</CODE>, create a subclass that
+ * uses {@link #expectThat(String,Function,Function) expectThat()} to add
+ * Matchers that compare instances property-by-property.
  */
 public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   {

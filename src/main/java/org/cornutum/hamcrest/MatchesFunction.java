@@ -19,6 +19,10 @@ import java.util.function.Function;
 
 /**
  * Applies a Matcher to compare values derived by a function.
+ * <P/>
+ * To match an expected (source) object of type <CODE>T</CODE> with another (matched) object, compares
+ * the values of type <CODE>R</CODE> derived using a specified function. To compare function values,
+ * uses a Matcher derived from the source object using a specified "result Matcher supplier" function.
  */
 public class MatchesFunction<T,R> extends BaseMatcher<T>
   {
