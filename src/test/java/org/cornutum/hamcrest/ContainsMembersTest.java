@@ -185,6 +185,26 @@ public class ContainsMembersTest
     }
 
   @Test
+  public void matchesIterator_fails()
+    {
+    // Given...
+    Iterator<String> expected = Arrays.asList( "Red", "Green", "Blue").iterator();
+    Iterator<String> actual = Arrays.asList( "Green", "Blue", "Red", "White").iterator();
+    
+    // Then...
+    expectFailure()
+      .when( () -> assertThatIterator( "Iterators", actual, containsMembers( expected)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: Iterable with 3 members",
+                   "but: had 1 unexpected members=[White]"))));
+    }
+
+  @Test
   public void matchesMemberMatcher()
     {
     // Given...
