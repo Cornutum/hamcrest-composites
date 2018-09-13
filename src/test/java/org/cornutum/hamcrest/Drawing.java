@@ -38,6 +38,25 @@ public class Drawing
     return "Drawing[" + getName() + "]";
     }
 
+  public boolean equals( Object object)
+    {
+    Drawing other =
+      object != null && object.getClass().equals( getClass())
+      ? (Drawing) object
+      : null;
+
+    return
+      other != null
+      && Objects.equals( other.getName(), getName());
+    }
+
+  public int hashCode()
+    {
+    return
+      getClass().hashCode()
+      ^ Objects.hashCode( getName());
+    }
+
   public static Shape circle( Color color)
     {
     return new Shape( Shape.Type.CIRCLE, color);
@@ -88,6 +107,29 @@ public class Drawing
     public String toString()
       {
       return "Color[" + getRed() + "," + getGreen() + "," + getBlue() + "]";
+      }
+
+    public boolean equals( Object object)
+      {
+      Color other =
+        object != null && object.getClass().equals( getClass())
+        ? (Color) object
+        : null;
+
+      return
+        other != null
+        && other.getRed() == getRed()
+        && other.getGreen() == getGreen()
+        && other.getBlue() == getBlue();
+      }
+
+    public int hashCode()
+      {
+      return
+        getClass().hashCode()
+        ^ getRed()
+        ^ getGreen()
+        ^ getBlue();
       }
     }
   
@@ -156,7 +198,23 @@ public class Drawing
       {
       super( expected);
       expectThat( "name", Drawing::getName, Matchers::equalTo);
-      expectThat( "elements", Drawing::getElements, Composites::containsMembers);
+      expectThat( "elements", Drawing::getElements, elements -> Composites.containsMembers( ShapeMatcher::new, elements));
+      }
+    }
+
+  /**
+   * A composite matcher for Shape instances.
+   */
+  public static class ShapeMatcher extends BaseCompositeMatcher<Shape>
+    {
+    /**
+     * Creates a new ShapeMatcher instance.
+     */
+    public ShapeMatcher( Shape expected)
+      {
+      super( expected);
+      expectThat( "type", Shape::getType, Matchers::equalTo);
+      expectThat( "color", Shape::getColor, Matchers::equalTo);
       }
     }
   }

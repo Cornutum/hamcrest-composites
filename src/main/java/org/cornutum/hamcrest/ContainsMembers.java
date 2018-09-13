@@ -11,12 +11,14 @@ import static org.cornutum.hamcrest.CompositeUtils.*;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 
 
@@ -26,7 +28,36 @@ import static java.util.stream.Collectors.toList;
 public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
   {
   private final List<T> expectedMembers;
+  private final Function<T,Matcher<T>> memberMatcherSupplier;
   private MemberMatcher memberMatcher;
+
+  /**
+   * Represents the match between a member of a matched Iterable and its counterpart in the expected Iterable.
+   */
+  private class MemberMatch
+    {
+    private final T actualMember;
+    private final Matcher<T> matcher;
+    
+    /**
+     * Creates a new MemberMatch instance.
+     */
+    public MemberMatch( T actualMember, Matcher<T> matcher)
+      {
+      this.actualMember = actualMember;
+      this.matcher = matcher;
+      }
+
+    public T getActualMember()
+      {
+      return actualMember;
+      }
+
+    public Matcher<T> getMatcher()
+      {
+      return matcher;
+      }    
+    }
 
   /**
    * Matches an actual Iterable with the list of expected members.
@@ -34,7 +65,8 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
   private class MemberMatcher
     {
     private final Object matched;
-    private final StringBuilder mismatch;
+    private String iterableMismatch;
+    private MemberMatch memberMismatch;
     
     /**
      * Creates a new MemberMatcher instance.
@@ -43,17 +75,20 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
     public MemberMatcher( Object actual)
       {
       matched = actual;
-      mismatch = new StringBuilder();
+      iterableMismatch = null;
+      memberMismatch = null;
 
+      // Expected and actual objects have the same "nullity"?
       if( (expectedMembers == null) != (actual == null))
         {
-        mismatch.append(
+        iterableMismatch = 
           expectedMembers == null
           ? "was not null"
-          : "was null");
+          : "was null";
         }
       else if( actual != null)
         {
+        // Comparing to an actual Iterable?
         Iterable<T> actualMembers =
           Iterable.class.isInstance( actual)?
           (Iterable<T>) actual :
@@ -68,10 +103,11 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
 
         if( actualMembers == null)
           {
-          mismatch.append( "was not an Iterable");
+          iterableMismatch = "was not an Iterable";
           }
         else
           {
+          // Are actual members a 1-to-1 "equals" match for expected members?
           List<T> unmatched = new ArrayList<>( expectedMembers);
           List<T> unexpected = new ArrayList<>();
 
@@ -88,28 +124,50 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
               }
             }
 
+          // Any expected members missing?
           if( !unmatched.isEmpty())
             {
-            mismatch
-              .append( "was missing ")
-              .append( unmatched.size())
-              .append( " members=[")
-              .append( toString( unmatched))
-              .append( "]");
+            iterableMismatch =
+              "was missing "
+              + unmatched.size()
+              + " members=["
+              + toString( unmatched)
+              + "]";
             }
 
+          // Any actual members unexpected?
           if( !unexpected.isEmpty())
             {
-            mismatch
-              .append( mismatch.length() == 0? "" : "\n     and: ")
-              .append( "had ")
-              .append( unexpected.size())
-              .append( " unexpected members=[")
-              .append( toString( unexpected))
-              .append( "]");
+            iterableMismatch =
+              (iterableMismatch == null? "" : (iterableMismatch + "\n     and: "))
+              + "had "
+              + unexpected.size()
+              + " unexpected members=["
+              + toString( unexpected)
+              + "]";
+            }
+
+          if( iterableMismatch == null && memberMatcherSupplier != null)
+            {
+            // Does each actual member satisfy the specified member Matcher for its expected member counterpart?
+            List<T> expected = new ArrayList<>( expectedMembers);
+            memberMismatch = 
+              streamFor( actualMembers)
+              .map( actualMember -> new MemberMatch( actualMember, memberMatcherSupplier.apply( expected.remove( expected.indexOf( actualMember)))))
+              .filter( m -> !m.getMatcher().matches( m.getActualMember()))
+              .findFirst()
+              .orElse( null);
             }
           }
         }
+      }
+
+    /**
+     * Returns the matching result.
+     */
+    public boolean matches()
+      {
+      return !getIterableMismatch().isPresent() && !getMemberMismatch().isPresent();
       }
 
     /**
@@ -121,14 +179,19 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
       }
 
     /**
-     * Returns a description of any mismatch between the expected list and the {@link #getMatched matched} object.
+     * Returns a description of any mismatch between the expected Iterable and the {@link #getMatched matched} object.
      */
-    public Optional<String> getMismatch()
+    public Optional<String> getIterableMismatch()
       {
-      return
-        mismatch.length() > 0
-        ? Optional.of( mismatch.toString())
-        : Optional.empty();
+      return Optional.ofNullable( iterableMismatch);
+      }
+
+    /**
+     * Returns any mismatch between a member of a matched Iterable and its counterpart in the expected Iterable.
+     */
+    public Optional<MemberMatch> getMemberMismatch()
+      {
+      return Optional.ofNullable( memberMismatch);
       }
 
     /**
@@ -148,6 +211,18 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
    */
   public ContainsMembers( Iterable<? extends T> expected)
     {
+    this( expected, null);
+    }
+ 
+  /**
+   * Creates a new ContainsMembers instance that adds an additional match condition: each member of a
+   * matched Iterable must satisfy the Matcher returned by the given supplier for its <CODE>equals</CODE>-matching 
+   * counterpart in the given expected Iterable.
+   */
+  public ContainsMembers( Iterable<? extends T> expected, Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    this.memberMatcherSupplier = memberMatcherSupplier;
+    
     expectedMembers =
       expected == null
       ? null
@@ -156,20 +231,36 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
 
   public boolean matches( Object actual)
     {
-    return !getMemberMatcher( actual).getMismatch().isPresent();
+    return getMemberMatcher( actual).matches();
     }
 
   public void describeTo( Description description)
     {
     description.appendText(
-      expectedMembers == null
-      ? "null"
-      : "Iterable with " + expectedMembers.size() + " members");
+      expectedMembers == null?
+      "null" :
+
+      getMemberMismatch()
+      .map( m -> "Iterable containing " + descriptionOf( m.getMatcher()))
+      
+      .orElse( "Iterable with " + expectedMembers.size() + " members"));
     }
 
   public void describeMismatch( Object actual, Description description)
     {
-    getMemberMatcher( actual).getMismatch().ifPresent( mismatch -> description.appendText( mismatch));
+    MemberMatcher memberMatcher = getMemberMatcher( actual);
+
+    String mismatch =
+      memberMatcher.getIterableMismatch()
+      .orElse(
+        memberMatcher.getMemberMismatch()
+        .map( m -> mismatchFor( m.getMatcher(), m.getActualMember()))
+        .orElse( null));
+
+    if( mismatch != null)
+      {
+      description.appendText( mismatch);
+      }
     }
 
   /**
@@ -183,5 +274,16 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
       }
 
     return memberMatcher;
+    }
+
+  /**
+   * Returns any mismatch between a member of a matched Iterable and its counterpart in the expected Iterable.
+   */
+  private Optional<MemberMatch> getMemberMismatch()
+    {
+    return
+      memberMatcher == null
+      ? Optional.empty()
+      : memberMatcher.getMemberMismatch();
     }
   }

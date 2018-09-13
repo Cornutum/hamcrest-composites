@@ -37,6 +37,16 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an Iterable containing the given collection of members in any order, with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> containsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ContainsMembers<T>( expected, memberMatcherSupplier);
+    }
+
+  /**
    * Returns a Matcher for an Iterable containing the given collection of members in any order.
    */
   @SafeVarargs
@@ -46,12 +56,34 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an Iterable containing the given collection of members in any order, with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected Iterable.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterable<T>> containsMembers( Function<T,Matcher<T>> memberMatcherSupplier, T... expected)
+    {
+    return containsMembers( memberMatcherSupplier, Arrays.asList( expected));
+    }
+
+  /**
    * Returns a Matcher for an Iterable containing the given collection of members in any order.
    */
   public static <T> Matcher<Iterable<T>> containsMembers( Iterator<T> expected)
     {
     Iterable<T> iterable = () -> expected;
     return containsMembers( iterable);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given collection of members in any order, with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> containsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterator<T> expected)
+    {
+    Iterable<T> iterable = () -> expected;
+    return containsMembers( memberMatcherSupplier, iterable);
     }
 
   /**

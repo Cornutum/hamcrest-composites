@@ -7,6 +7,9 @@
 
 package org.cornutum.hamcrest;
 
+import org.cornutum.hamcrest.Drawing.DrawingMatcher;
+import static org.cornutum.hamcrest.Drawing.*;
+import static org.cornutum.hamcrest.Drawing.Color.*;
 import static org.cornutum.hamcrest.Composites.*;
 import static org.cornutum.hamcrest.ExpectedFailure.*;
 
@@ -179,5 +182,58 @@ public class ContainsMembersTest
     
     // When...
     assertThatIterator( actual, containsMembers( expected));
+    }
+
+  @Test
+  public void matchesMemberMatcher()
+    {
+    // Given...
+    Drawing[] expected =
+      new Drawing[]
+        {
+          new Drawing( "Reds", triangle( RED), rectangle( RED), circle( RED)),
+          new Drawing( "Greens", triangle( GREEN), rectangle( GREEN), circle( GREEN)),
+          new Drawing( "Blues", triangle( BLUE), rectangle( BLUE), circle( BLUE))
+        };
+
+    List<Drawing> actual =
+      Arrays.asList(
+        new Drawing( "Greens", triangle( GREEN), circle( GREEN), rectangle( GREEN)),
+        new Drawing( "Blues", rectangle( BLUE), circle( BLUE), triangle( BLUE)),
+        new Drawing( "Reds", circle( RED), triangle( RED), rectangle( RED)));
+        
+    
+    // When...
+    assertThat( "Member matchers", actual, containsMembers( DrawingMatcher::new, expected));
+    }
+
+  @Test
+  public void matchesMemberMatcher_fails()
+    {
+    // Given...
+    List<Drawing> expected =
+      Arrays.asList(
+        new Drawing( "Greens", triangle( GREEN), circle( GREEN), rectangle( GREEN)),
+        new Drawing( "Blues", rectangle( BLUE), circle( BLUE), triangle( BLUE)),
+        new Drawing( "Reds", circle( RED), triangle( RED), rectangle( RED)));
+
+    List<Drawing> actual =
+      Arrays.asList(
+        new Drawing( "Greens", triangle( GREEN), circle( GREEN), rectangle( GREEN)),
+        new Drawing( "Blues", rectangle( BLUE), circle( RED), triangle( BLUE)),
+        new Drawing( "Reds", circle( RED), triangle( RED), rectangle( RED)));
+        
+    
+    // Then...
+    expectFailure()
+      .when( () -> assertThat( "Member matchers", actual, containsMembers( DrawingMatcher::new, expected)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: Iterable containing Drawing[Blues] matching elements=Iterable containing CIRCLE[Color[0,0,255]] matching color=<Color[0,0,255]>",
+                   "but: was <Color[255,0,0]>"))));
     }
   }

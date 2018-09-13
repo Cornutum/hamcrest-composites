@@ -39,7 +39,7 @@ public class CompositeMatcherTest
                failure.getMessage(),
                stringContainsInOrder(
                  Arrays.asList(
-                   "Expected: " + expected.toString() + ", not null",
+                   "Expected: " + expected.toString() + " matching not null",
                    "but: was null"))));
     }
 
@@ -70,7 +70,7 @@ public class CompositeMatcherTest
                failure.getMessage(),
                stringContainsInOrder(
                  Arrays.asList(
-                   "Expected: " + expected.toString() + ", name=null",
+                   "Expected: " + expected.toString() + " matching name=null",
                    "but: was \"Empty\""))));
     }
 
@@ -90,7 +90,7 @@ public class CompositeMatcherTest
                failure.getMessage(),
                stringContainsInOrder(
                  Arrays.asList(
-                   "Expected: " + expected.toString() + ", name=\"Empty\"",
+                   "Expected: " + expected.toString() + " matching name=\"Empty\"",
                    "but: was null"))));
     }
 
@@ -98,8 +98,8 @@ public class CompositeMatcherTest
   public void matchesProperties()
     {
     // Given...
-    Drawing expected = new Drawing( "Dots", circle( RED), circle( BLUE));
-    Drawing actual = new Drawing( "Dots", circle( BLUE), circle( RED));
+    Drawing expected = new Drawing( "Dots", triangle( RED), circle( BLUE));
+    Drawing actual = new Drawing( "Dots", circle( BLUE), triangle( RED));
     
     // When...
     assertThat( "Names", actual, new DrawingMatcher( expected));
@@ -121,7 +121,7 @@ public class CompositeMatcherTest
                failure.getMessage(),
                stringContainsInOrder(
                  Arrays.asList(
-                   "Expected: " + expected.toString() + ", elements=Iterable with 2 members",
+                   "Expected: " + expected.toString() + " matching elements=Iterable with 2 members",
                    "but: was missing 1 members=[CIRCLE[Color[0,0,255]]]",
                    "and: had 1 unexpected members=[TRIANGLE[Color[0,0,255]]]"))));
     }

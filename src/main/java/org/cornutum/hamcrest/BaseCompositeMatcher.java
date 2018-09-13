@@ -95,7 +95,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   public void describeTo( Description description)
     {
     description .appendText( String.valueOf( expected));
-    getMismatch().ifPresent( m -> { description.appendText( ", "); m.describeTo( description); });
+    getMismatch().ifPresent( m -> { description.appendText( " matching "); m.describeTo( description); });
     }
 
   public void describeMismatch( Object actual, Description description)
