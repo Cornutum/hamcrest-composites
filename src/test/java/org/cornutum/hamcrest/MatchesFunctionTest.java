@@ -113,7 +113,7 @@ public class MatchesFunctionTest
     Drawing actual = new Drawing( "Empty");
     
     // When...
-    assertThat( "Names", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo));
+    assertThat( "Names", actual, comparedTo( expected).byValueOf( "name", Drawing::getName).matches( Matchers::equalTo));
     }
 
   @Test

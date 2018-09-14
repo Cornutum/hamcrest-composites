@@ -144,4 +144,41 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
 
     return functionMatcher;
     }
+
+  /**
+   * Defines a fluent interface for building a {@link MatchesFunction} matcher.
+   */
+  public static class Builder<T,R>
+    {
+    private String functionName;
+    private Function<T,R> function;
+    private T source;
+    
+    /**
+     * Creates a new Builder to build a {@link MatchesFunction} matcher for the given source object.
+     */
+    public Builder( T source)
+      {
+      this.source = source;
+      }
+
+    /**
+     * Changes the function used by the {@link MatchesFunction} matcher.
+     */
+    public Builder<T,R> byValueOf( String functionName, Function<T,R> function)
+      {
+      this.functionName = functionName;
+      this.function = function;
+      return this;
+      }
+
+    /**
+     * Changes the result Matcher supplier function used by the {@link MatchesFunction} matcher
+     * and returns the specified {@link MatchesFunction} matcher.
+     */
+    public Matcher<T> matches( Function<R,Matcher<R>> resultMatcherSupplier)
+      {
+      return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
+      }
+    }
   }

@@ -7,6 +7,8 @@
 
 package org.cornutum.hamcrest;
 
+import static org.cornutum.hamcrest.Composites.*;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -197,8 +199,8 @@ public class Drawing
     public DrawingMatcher( Drawing expected)
       {
       super( expected);
-      expectThat( "name", Drawing::getName, Matchers::equalTo);
-      expectThat( "elements", Drawing::getElements, elements -> Composites.containsMembers( ShapeMatcher::new, elements));
+      expectThat( valueOf( "name", Drawing::getName).matches( Matchers::equalTo));
+      expectThat( valueOf( "elements", Drawing::getElements).matches( elements -> containsMembers( ShapeMatcher::new, elements)));
       }
     }
 

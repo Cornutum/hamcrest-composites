@@ -110,7 +110,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   /**
    * Adds the Matcher supplied for the expected object to the matchers applied by this Matcher.
    */
-  public void expectThat( Function<T,Matcher<T>> matcherSupplier)
+  protected void expectThat( Function<T,Matcher<T>> matcherSupplier)
     {
     matchers.add( matcherSupplier.apply( expected));
     }
@@ -118,9 +118,18 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   /**
    * Adds a {@link MatchesFunction} matcher for the expected object to the matchers applied by this Matcher.
    */
-  public <R> void expectThat( String functionName, Function<T,R> function, Function<R,Matcher<R>> resultMatcherSupplier)
+  protected <R> void expectThat( String functionName, Function<T,R> function, Function<R,Matcher<R>> resultMatcherSupplier)
     {
     matchers.add( new MatchesFunction<T,R>( functionName, function, expected, resultMatcherSupplier));
+    }
+
+  /**
+   * Returns a new {@link MatchesFunctionSupplier} that supplies a {@link MatchesFunction} matcher using
+   * the given function.
+   */
+  protected <R> MatchesFunctionSupplier<T,R> valueOf( String functionName, Function<T,R> function)
+    {
+    return new MatchesFunctionSupplier<>( functionName, function);
     }
 
   /**
@@ -145,5 +154,42 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
       compositeMatcher == null
       ? Optional.empty()
       : compositeMatcher.getMismatch();
+    }
+
+  /**
+   * Builds and supplies a {@link MatchesFunction} matcher for a specified source object.
+   */
+  public static class MatchesFunctionSupplier<T,R> implements Function<T,Matcher<T>>
+    {
+    private String functionName;
+    private Function<T,R> function;
+    private Function<R,Matcher<R>> resultMatcherSupplier;
+    
+    /**
+     * Creates a new MatchesFunctionSupplier that supplies a {@link MatchesFunction} matcher using
+     * the given function.
+     */
+    public MatchesFunctionSupplier( String functionName, Function<T,R> function)
+      {
+      this.functionName = functionName;
+      this.function = function;
+      }
+
+    /**
+     * Changes the result Matcher supplier function for the {@link MatchesFunction} matcher supplied.
+     */
+    public MatchesFunctionSupplier<T,R> matches( Function<R,Matcher<R>> resultMatcherSupplier)
+      {
+      this.resultMatcherSupplier = resultMatcherSupplier;
+      return this;
+      }
+
+    /**
+     * Returns the {@link MatchesFunction} matcher supplied for the given source object.
+     */
+    public Matcher<T> apply( T source)
+      {
+      return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
+      }
     }
   }

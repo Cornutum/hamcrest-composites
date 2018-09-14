@@ -95,6 +95,14 @@ public final class Composites
     }
 
   /**
+   * Returns a new {@link MatchesFunction.Builder} for the given expected object.
+   */
+  public static <T,R> MatchesFunction.Builder<T,R> comparedTo( T expected)
+    {
+    return new MatchesFunction.Builder<>( expected);
+    }
+
+  /**
    * Throws an AssertionError if the given array does not contain the members expected by the given matcher.
    */
   public static <T> void assertThatArray( String reason, T[] actual, Matcher<Iterable<T>> matcher)
