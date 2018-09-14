@@ -95,6 +95,14 @@ public final class Composites
     }
 
   /**
+   * To create a more expressive reference, especially for a constructor expression, simply returns the given Matcher value.
+   */
+  public static <T> Matcher<T> matches( Matcher<T> matcherExpression)
+    {
+    return matcherExpression;
+    }
+
+  /**
    * Returns a new {@link MatchesFunction.Builder} for the given expected object.
    */
   public static <T,R> MatchesFunction.Builder<T,R> comparedTo( T expected)

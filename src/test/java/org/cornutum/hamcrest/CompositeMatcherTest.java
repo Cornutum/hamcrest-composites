@@ -8,6 +8,7 @@
 package org.cornutum.hamcrest;
 
 import org.cornutum.hamcrest.Drawing.DrawingMatcher;
+import static org.cornutum.hamcrest.Composites.matches;
 import static org.cornutum.hamcrest.Drawing.*;
 import static org.cornutum.hamcrest.Drawing.Color.*;
 import static org.cornutum.hamcrest.ExpectedFailure.*;
@@ -32,7 +33,7 @@ public class CompositeMatcherTest
     
     // Then...
     expectFailure()
-      .when( () -> assertThat( "Null object", actual, new DrawingMatcher( expected)))
+      .when( () -> assertThat( "Null object", actual, matches( new DrawingMatcher( expected))))
       .then( failure ->
              assertThat(
                "Failure message",
@@ -51,7 +52,7 @@ public class CompositeMatcherTest
     Drawing actual = new Drawing( null);
     
     // When...
-    assertThat( "Null result", actual, new DrawingMatcher( expected));
+    assertThat( "Null result", actual, matches( new DrawingMatcher( expected)));
     }
 
   @Test
@@ -63,7 +64,7 @@ public class CompositeMatcherTest
     
     // Then...
     expectFailure()
-      .when( () -> assertThat( "Null result", actual, new DrawingMatcher( expected)))
+      .when( () -> assertThat( "Null result", actual, matches( new DrawingMatcher( expected))))
       .then( failure ->
              assertThat(
                "Failure message",
@@ -83,7 +84,7 @@ public class CompositeMatcherTest
     
     // Then...
     expectFailure()
-      .when( () -> assertThat( "Non-null result", actual, new DrawingMatcher( expected)))
+      .when( () -> assertThat( "Non-null result", actual, matches( new DrawingMatcher( expected))))
       .then( failure ->
              assertThat(
                "Failure message",
@@ -102,7 +103,7 @@ public class CompositeMatcherTest
     Drawing actual = new Drawing( "Dots", circle( BLUE), triangle( RED));
     
     // When...
-    assertThat( "Names", actual, new DrawingMatcher( expected));
+    assertThat( "Names", actual, matches( new DrawingMatcher( expected)));
     }
 
   @Test
@@ -114,7 +115,7 @@ public class CompositeMatcherTest
     
     // Then...
     expectFailure()
-      .when( () -> assertThat( "Names", actual, new DrawingMatcher( expected)))
+      .when( () -> assertThat( "Names", actual, matches( new DrawingMatcher( expected))))
       .then( failure ->
              assertThat(
                "Failure message",
