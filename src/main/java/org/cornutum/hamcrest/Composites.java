@@ -111,7 +111,7 @@ public final class Composites
     }
 
   /**
-   * Throws an AssertionError if the given array does not contain the members expected by the given matcher.
+   * Throws an AssertionError if the given array does not satisfy the given Iterable matcher.
    */
   public static <T> void assertThatArray( String reason, T[] actual, Matcher<Iterable<T>> matcher)
     {
@@ -119,7 +119,7 @@ public final class Composites
     }
 
   /**
-   * Throws an AssertionError if the given array does not contain the members expected by the given matcher.
+   * Throws an AssertionError if the given array does not satisfy the given Iterable matcher.
    */
   public static <T> void assertThatArray( T[] actual, Matcher<Iterable<T>> matcher)
     {
@@ -127,7 +127,7 @@ public final class Composites
     }
 
   /**
-   * Throws an AssertionError if the given iterator does not contain the members expected by the given matcher.
+   * Throws an AssertionError if the given iterator does not satisfy the the given Iterable matcher.
    */
   public static <T> void assertThatIterator( String reason, Iterator<T> actual, Matcher<Iterable<T>> matcher)
     {
@@ -135,7 +135,7 @@ public final class Composites
     }
 
   /**
-   * Throws an AssertionError if the given iterator does not contain the members expected by the given matcher.
+   * Throws an AssertionError if the given iterator does not satisfy the given Iterable matcher.
    */
   public static <T> void assertThatIterator( Iterator<T> actual, Matcher<Iterable<T>> matcher)
     {
