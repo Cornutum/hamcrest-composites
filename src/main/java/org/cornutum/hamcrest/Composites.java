@@ -87,6 +87,62 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> containsElements( T... expected)
+    {
+    return new ContainsElements<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected array.
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, T... expected)
+    {
+    return new ContainsElements<T>( expected, elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  public static <T> Matcher<T[]> containsElements( Iterable<? extends T> expected)
+    {
+    return new ContainsElements<T>( toArray( expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ContainsElements<T>( toArray( expected), elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  public static <T> Matcher<T[]> containsElements( Iterator<T> expected)
+    {
+    return new ContainsElements<T>( toArray( () -> expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterator<T> expected)
+    {
+    return new ContainsElements<T>( toArray( () -> expected), elementMatcherSupplier);
+    }
+
+  /**
    * Returns a Matcher that compares values of the given function, using a result Matcher returned by the given supplier.
    */
   public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)
@@ -108,22 +164,6 @@ public final class Composites
   public static <T,R> MatchesFunction.Builder<T,R> comparedTo( T expected)
     {
     return new MatchesFunction.Builder<>( expected);
-    }
-
-  /**
-   * Throws an AssertionError if the given array does not satisfy the given Iterable matcher.
-   */
-  public static <T> void assertThatArray( String reason, T[] actual, Matcher<Iterable<T>> matcher)
-    {
-    assertMatches( reason, actual, matcher);
-    }
-
-  /**
-   * Throws an AssertionError if the given array does not satisfy the given Iterable matcher.
-   */
-  public static <T> void assertThatArray( T[] actual, Matcher<Iterable<T>> matcher)
-    {
-    assertThatArray( "", actual, matcher);
     }
 
   /**

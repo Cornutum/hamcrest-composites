@@ -167,10 +167,10 @@ public class ContainsMembersTest
   public void matchesArray()
     {
     // Given...
-    String[] actual = new String[]{ "Green", "Blue", "Red"};
+    List<String> actual = Arrays.asList( "Green", "Blue", "Red");
     
     // When...
-    assertThatArray( "Arrays", actual, containsMembers( "Red", "Green", "Blue"));
+    assertThat( "Arrays", actual, containsMembers( "Red", "Green", "Blue"));
     }
 
   @Test

@@ -142,6 +142,15 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
     }
 
   /**
+   * Returns a new {@link ContainsElements.Supplier} that supplies a {@link ContainsElements} matcher using
+   * the given element Matcher supplier.
+   */
+  protected static <T> ContainsElements.Supplier<T> containsElementsMatching( Function<T,Matcher<T>> elementMatcherSupplier)
+    {
+    return new ContainsElements.Supplier<>( elementMatcherSupplier);
+    }
+
+  /**
    * Returns the CompositeMatcher for the given actual object
    */
   private CompositeMatcher getCompositeMatcher( Object actual)

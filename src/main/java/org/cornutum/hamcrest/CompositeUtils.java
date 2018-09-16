@@ -36,6 +36,15 @@ public final class CompositeUtils
     }
 
   /**
+   * Returns an array that contains the members of the given Iterable.
+   */
+  @SuppressWarnings("unchecked")
+  public static <T> T[] toArray( Iterable<T> iterable)
+    {
+    return (T[]) streamFor( iterable).toArray();
+    }
+
+  /**
    * Returns a description of the mismatch reported by the given Matcher for the given object.
    */
   public static String mismatchFor( Matcher<?> matcher, Object object)

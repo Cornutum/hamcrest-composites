@@ -17,6 +17,7 @@ public class Drawing
   {
   private final String name;
   private final List<Shape> elements;
+  private String[] tags;
 
   public Drawing( String name, Shape... elements)
     {
@@ -34,6 +35,16 @@ public class Drawing
     return elements;
     }
 
+  public void setTags( String... tags)
+    {
+    this.tags = tags;
+    }
+
+  public String[] getTags()
+    {
+    return tags;
+    }
+  
   public String toString()
     {
     return "Drawing[" + getName() + "]";
@@ -200,6 +211,7 @@ public class Drawing
       super( expected);
       expectThat( valueOf( "name", Drawing::getName).matches( Matchers::equalTo));
       expectThat( valueOf( "elements", Drawing::getElements).matches( containsMembersMatching( ShapeMatcher::new)));
+      expectThat( valueOf( "tags", Drawing::getTags).matches( Composites::containsElements));
       }
     }
 
