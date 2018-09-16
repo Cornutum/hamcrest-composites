@@ -151,6 +151,15 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
     }
 
   /**
+   * Returns a new {@link VisitsMembers.Supplier} that supplies a {@link VisitsMembers} matcher using
+   * the given member Matcher supplier.
+   */
+  protected static <T> VisitsMembers.Supplier<T> visitsMembersMatching( Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    return new VisitsMembers.Supplier<>( memberMatcherSupplier);
+    }
+
+  /**
    * Returns the CompositeMatcher for the given actual object
    */
   private CompositeMatcher getCompositeMatcher( Object actual)
