@@ -8,12 +8,14 @@
 package org.cornutum.hamcrest;
 
 import static org.cornutum.hamcrest.Composites.*;
+import static org.cornutum.hamcrest.CompositeUtils.*;
 import static org.cornutum.hamcrest.ExpectedFailure.*;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.hamcrest.Matchers.is;
 
 import java.util.Arrays;
 
@@ -21,7 +23,7 @@ import java.util.Arrays;
  * Runs tests for the {@link MatchesFunction} matcher.
  */
 public class MatchesFunctionTest
-  {  
+  {
   @Test
   public void matchesNullSource_fails()
     {
@@ -32,6 +34,19 @@ public class MatchesFunctionTest
     // Then...
     expectFailure( IllegalArgumentException.class)
       .when( () -> assertThat( "Null source", actual, matchesFunction( "name", Drawing::getName, expected, Matchers::equalTo)));;;
+    }
+  
+  @Test
+  public void matchesWrongSource_fails()
+    {
+    // Given...
+    Drawing expected = new Drawing( "Empty");
+    MatchesFunction<Drawing,String> matchesFunction = new MatchesFunction<Drawing,String>( "name", Drawing::getName, expected, Matchers::equalTo);
+    String actual = "Can you match me?";
+
+    // Then...
+    assertThat( "Wrong source", matchesFunction.matches( actual), is( false));
+    assertThat( "Wrong source mismatch", mismatchFor( matchesFunction, actual), is( "name can't be derived from an object of class=String"));
     }
 
   @Test

@@ -56,7 +56,7 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
         }
       else if( !sourceClass.isInstance( object))
         {
-        mismatch.append( getFunctionName() + " can't be derived from an object of class=" + object.getClass());
+        mismatch.append( getFunctionName() + " can't be derived from an object of class=" + object.getClass().getSimpleName());
         }
       else if( !resultMatcher.matches( (actualResult = function.apply( (T) object))))
         {
