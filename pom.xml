@@ -100,7 +100,7 @@
                                 <classifier>javadoc</classifier>
                                 <doclint>none</doclint>
                                 <links>
-                                    <link>http://hamcrest.org/JavaHamcrest/javadoc/2.0.0.0/</link>
+                                    <link>http://hamcrest.org/JavaHamcrest/javadoc/1.3/</link>
                                 </links>
                             </configuration>
                         </execution>
