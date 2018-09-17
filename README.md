@@ -38,7 +38,7 @@ public class DrawingMatcher extends BaseCompositeMatcher<Drawing>
     expectThat( valueOf( "name", Drawing::getName).matches( Matchers::equalTo));
 
     // Compare values for an Iterable container property, comparing the complete tree of properties for each member.
-    expectThat( valueOf( "elements", Drawing::getElements).matches( elements -> containsMembers( ShapeMatcher::new, elements)));
+    expectThat( valueOf( "elements", Drawing::getElements).matches( containsMembersMatching( ShapeMatcher::new)));
 
     // Compare values for an array property.
     expectThat( valueOf( "tags", Drawing::getTags).matches( Composites::containsElements));
@@ -56,7 +56,39 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
 
 ## How Does It Work? ##
 
-## What's the API? ##
+* **To add composite matchers to an assertion...**
+    * Use the static methods defined by the [`Composites`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/Composites.html) class.
 
+* **To match all properties of an object...**
+    * Create a subclass of [`BaseCompositeMatcher`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/BaseCompositeMatcher.html). 
+    * Use `expectThat()` to add to the list of matchers applied to a matched `Drawing`. 
+    * Use `valueOf()` to fluently define a [`MatchesFunction`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/MatchesFunction.html) matcher based on a property accessor. 
+    * Use methods like `containsMembersMatching()`, etc. to fluently complete the matcher for a property of type Iterable, array, or Iterator. 
 
+* **To match all members of an Iterable, regardless of order...**
+    * Use the [`ContainsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsMembers.html) matcher. 
+    * Even if the expected or matched Iterable may be `null`? No problem! 
+    * And also compare individual members using a composite matcher? No problem! 
+
+* **To match all elements of an array, regardless of order...**
+    * Use the [`ContainsElements`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsElements.html) matcher. 
+    * Even if the expected or matched array may be `null`? No problem! 
+    * And also compare elements using a composite matcher? No problem! 
+
+* **To match all objects supplied by an Iterator, regardless of order...**
+    * Use the [`VisitsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsMembers.html) matcher. 
+    * Even if the expected or matched Iterator may be `null`? No problem! 
+    * And also compare individual members using a composite matcher? No problem! 
+
+<H2>Need More Examples?</H2>
+
+For full details, see the complete [Javadoc](http://www.cornutum.org/hamcrest-composites/apidocs/).
+
+For more examples of how to use composite matchers, see the unit tests for:
+
+* [`BaseCompositeMatcher`](src/test/java/org/cornutum/hamcrest/CompositeMatcherTest.java)
+* [`ContainsElements`](src/test/java/org/cornutum/hamcrest/ContainsElementsTest.java)
+* [`ContainsMembers`](src/test/java/org/cornutum/hamcrest/ContainsMembersTest.java)
+* [`MatchesFunction`](src/test/java/org/cornutum/hamcrest/MatchesFunctionTest.java)
+* [`VisitsMembers`](src/test/java/org/cornutum/hamcrest/VisitsMembersTest.java)
 
