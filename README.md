@@ -53,6 +53,22 @@ see an assertion error message that pinpoints the discrepancy like this:
 Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching color=<Color[0,0,255]>
      but: was <Color[255,0,0]>
 ```
+## Is It Compatible with Standard Hamcrest? ##
+
+Yes, `hamcrest-composites` is based on standard Hamcrest 1.3. But compared to the standard Hamcrest, it offers several improvements.
+
+* **The concept of "composite matcher" is new** There is nothing like it in standard Hamcrest. What's new is a single Matcher class that will compare *any two* class instances
+property-by-property. The problem is that every Matcher instance is bound to a specific expected value. But `BaseCompositeMatcher`, together with the `MatchesFunction`
+matcher delays binding of property value matchers using "matcher supplier" functions.
+
+* **`ContainsMembers` v. `IsIterableContainingInAnyOrder`** Both of these matchers will verify that two Iterables contain the same set of members. But:
+    * `ContainsMembers` works even if either the expected or the matched Iterable is `null`.
+    * `ContainsMembers` accepts the members expected in multiple forms, using either an Iterable or an array or even an Iterator.
+    * `ContainsMembers` can optionally apply a member-specific composite matcher to perform a "deep match" on each individual member.
+    * `ContainsMembers` responds to a mismatch with a more concise and specific message, even in the case of deeply-nested collections.
+
+* **Matchers for arrays and Iterators** Sometimes collections come in different forms. `hamcrest-composites` provides matchers equivalent to `ContainsMembers` that
+can be used to verify the contents arrays or Iterators.
 
 ## How Does It Work? ##
 
