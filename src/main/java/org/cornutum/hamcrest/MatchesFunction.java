@@ -56,7 +56,7 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
         }
       else if( !sourceClass.isInstance( object))
         {
-        mismatch.append( getFunctionName() + " can't be derived from an object of class=" + object.getClass());
+        mismatch.append( getFunctionName() + " can't be derived from an object of class=" + object.getClass().getSimpleName());
         }
       else if( !resultMatcher.matches( (actualResult = function.apply( (T) object))))
         {
@@ -81,6 +81,80 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
         mismatch.length() > 0
         ? Optional.of( mismatch.toString())
         : Optional.empty();
+      }
+    }
+
+  /**
+   * Builds and supplies a {@link MatchesFunction} matcher for a specified source object.
+   */
+  public static class Supplier<T,R> implements Function<T,Matcher<T>>
+    {
+    private String functionName;
+    private Function<T,R> function;
+    private Function<R,Matcher<R>> resultMatcherSupplier;
+    
+    /**
+     * Creates a new Supplier that supplies a {@link MatchesFunction} matcher using
+     * the given function.
+     */
+    public Supplier( String functionName, Function<T,R> function)
+      {
+      this.functionName = functionName;
+      this.function = function;
+      }
+
+    /**
+     * Changes the result Matcher supplier function for the {@link MatchesFunction} matcher supplied.
+     */
+    public Supplier<T,R> matches( Function<R,Matcher<R>> resultMatcherSupplier)
+      {
+      this.resultMatcherSupplier = resultMatcherSupplier;
+      return this;
+      }
+
+    /**
+     * Returns the {@link MatchesFunction} matcher supplied for the given source object.
+     */
+    public Matcher<T> apply( T source)
+      {
+      return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
+      }
+    }
+
+  /**
+   * Defines a fluent interface for building a {@link MatchesFunction} matcher.
+   */
+  public static class Builder<T,R>
+    {
+    private String functionName;
+    private Function<T,R> function;
+    private T source;
+    
+    /**
+     * Creates a new Builder to build a {@link MatchesFunction} matcher for the given source object.
+     */
+    public Builder( T source)
+      {
+      this.source = source;
+      }
+
+    /**
+     * Changes the function used by the {@link MatchesFunction} matcher.
+     */
+    public Builder<T,R> byValueOf( String functionName, Function<T,R> function)
+      {
+      this.functionName = functionName;
+      this.function = function;
+      return this;
+      }
+
+    /**
+     * Changes the result Matcher supplier function used by the {@link MatchesFunction} matcher
+     * and returns the specified {@link MatchesFunction} matcher.
+     */
+    public Matcher<T> matches( Function<R,Matcher<R>> resultMatcherSupplier)
+      {
+      return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
       }
     }
    
@@ -143,42 +217,5 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
       }
 
     return functionMatcher;
-    }
-
-  /**
-   * Defines a fluent interface for building a {@link MatchesFunction} matcher.
-   */
-  public static class Builder<T,R>
-    {
-    private String functionName;
-    private Function<T,R> function;
-    private T source;
-    
-    /**
-     * Creates a new Builder to build a {@link MatchesFunction} matcher for the given source object.
-     */
-    public Builder( T source)
-      {
-      this.source = source;
-      }
-
-    /**
-     * Changes the function used by the {@link MatchesFunction} matcher.
-     */
-    public Builder<T,R> byValueOf( String functionName, Function<T,R> function)
-      {
-      this.functionName = functionName;
-      this.function = function;
-      return this;
-      }
-
-    /**
-     * Changes the result Matcher supplier function used by the {@link MatchesFunction} matcher
-     * and returns the specified {@link MatchesFunction} matcher.
-     */
-    public Matcher<T> matches( Function<R,Matcher<R>> resultMatcherSupplier)
-      {
-      return new MatchesFunction<T,R>( functionName, function, source, resultMatcherSupplier);
-      }
     }
   }

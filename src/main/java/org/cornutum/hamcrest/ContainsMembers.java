@@ -65,6 +65,32 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
     }
 
   /**
+   * Builds and supplies a {@link ContainsMembers} matcher for a specified source Iterable.
+   */
+  public static class Supplier<T,S extends Iterable<T>> implements Function<S,Matcher<S>>
+    {
+    private Function<T,Matcher<T>> memberMatcherSupplier;
+    
+    /**
+     * Creates a new ContainsMembersSupplier that supplies a {@link ContainsMembers} matcher using
+     * the given member Matcher supplier.
+     */
+    public Supplier( Function<T,Matcher<T>> memberMatcherSupplier)
+      {
+      this.memberMatcherSupplier = memberMatcherSupplier;
+      }
+
+    /**
+     * Returns the {@link ContainsMembers} matcher supplied for the given source Iterable.
+     */
+    @SuppressWarnings("unchecked")
+    public Matcher<S> apply( S source)
+      {
+      return (Matcher<S>) new ContainsMembers<T>( source, memberMatcherSupplier);
+      }
+    }
+
+  /**
    * Matches an actual Iterable with the list of expected members.
    */
   private class MemberMatcher

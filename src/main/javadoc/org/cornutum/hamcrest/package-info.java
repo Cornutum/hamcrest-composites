@@ -108,6 +108,6 @@
  * <H2>Need More Examples?</H2>
  *
  * For more examples of <CODE>hamcrest-composites</CODE> matchers in action,
- * see the <A href="https://github.com/Cornutum/hamcrest-composites/blob/masterREADME.md#need-more-examples">unit tests</A>.
+ * see the <A href="https://github.com/Cornutum/hamcrest-composites/blob/master/README.md#need-more-examples">unit tests</A>.
  */
 package org.cornutum.hamcrest;

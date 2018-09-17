@@ -11,7 +11,9 @@ import static org.cornutum.hamcrest.CompositeUtils.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
+import static java.util.stream.Collectors.toList;
 
 import org.hamcrest.Matcher;
 
@@ -87,6 +89,120 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> containsElements( T... expected)
+    {
+    return new ContainsElements<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected array.
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, T... expected)
+    {
+    return new ContainsElements<T>( expected, elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  public static <T> Matcher<T[]> containsElements( Iterable<? extends T> expected)
+    {
+    return new ContainsElements<T>( toArray( expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ContainsElements<T>( toArray( expected), elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order.
+   */
+  public static <T> Matcher<T[]> containsElements( Iterator<T> expected)
+    {
+    return new ContainsElements<T>( toArray( () -> expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given collection of elements in any order, with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<T[]> containsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterator<T> expected)
+    {
+    return new ContainsElements<T>( toArray( () -> expected), elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterator<T>> visitsMembers( T... expected)
+    {
+    return new VisitsMembers<T>( Arrays.asList( expected).iterator());
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order, with
+   * an additional match condition: each member of a matched collection must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterator<T>> visitsMembers( Function<T,Matcher<T>> memberMatcherSupplier, T... expected)
+    {
+    return new VisitsMembers<T>( Arrays.asList( expected).iterator(), memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order.
+   */
+  public static <T> Matcher<Iterator<T>> visitsMembers( Iterable<? extends T> expected)
+    {
+    List<T> members = streamFor( expected).collect( toList());
+    return new VisitsMembers<T>( members.iterator());
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order, with
+   * an additional match condition: each member of a matched collection must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<Iterator<T>> visitsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterable<? extends T> expected)
+    {
+    List<T> members = streamFor( expected).collect( toList());
+    return new VisitsMembers<T>( members.iterator(), memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order.
+   */
+  public static <T> Matcher<Iterator<T>> visitsMembers( Iterator<T> expected)
+    {
+    return new VisitsMembers<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given collection of members in any order, with
+   * an additional match condition: each member of a matched collection must satisfy the Matcher returned 
+   * by the given supplier for its <CODE>equals</CODE>-matching counterpart in the given expected collection.
+   */
+  public static <T> Matcher<Iterator<T>> visitsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterator<T> expected)
+    {
+    return new VisitsMembers<T>( expected, memberMatcherSupplier);
+    }
+
+  /**
    * Returns a Matcher that compares values of the given function, using a result Matcher returned by the given supplier.
    */
   public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)
@@ -95,61 +211,18 @@ public final class Composites
     }
 
   /**
+   * To create a more expressive reference, especially for a constructor expression, simply returns the given Matcher value.
+   */
+  public static <T> Matcher<T> matches( Matcher<T> matcherExpression)
+    {
+    return matcherExpression;
+    }
+
+  /**
    * Returns a new {@link MatchesFunction.Builder} for the given expected object.
    */
   public static <T,R> MatchesFunction.Builder<T,R> comparedTo( T expected)
     {
     return new MatchesFunction.Builder<>( expected);
-    }
-
-  /**
-   * Throws an AssertionError if the given array does not contain the members expected by the given matcher.
-   */
-  public static <T> void assertThatArray( String reason, T[] actual, Matcher<Iterable<T>> matcher)
-    {
-    assertMatches( reason, actual, matcher);
-    }
-
-  /**
-   * Throws an AssertionError if the given array does not contain the members expected by the given matcher.
-   */
-  public static <T> void assertThatArray( T[] actual, Matcher<Iterable<T>> matcher)
-    {
-    assertThatArray( "", actual, matcher);
-    }
-
-  /**
-   * Throws an AssertionError if the given iterator does not contain the members expected by the given matcher.
-   */
-  public static <T> void assertThatIterator( String reason, Iterator<T> actual, Matcher<Iterable<T>> matcher)
-    {
-    assertMatches( reason, actual, matcher);
-    }
-
-  /**
-   * Throws an AssertionError if the given iterator does not contain the members expected by the given matcher.
-   */
-  public static <T> void assertThatIterator( Iterator<T> actual, Matcher<Iterable<T>> matcher)
-    {
-    assertThatIterator( "", actual, matcher);
-    }
-
-  /**
-   * Throws an AssertionError if the given object does not satisfy the given matcher.
-   */
-  private static <T> void assertMatches( String reason, Object actual, Matcher<?> matcher)
-    {
-    if( !matcher.matches( actual))
-      {
-      StringBuilder mismatch =
-        new StringBuilder()
-        .append( reason)
-        .append( "\nExpected: ")
-        .append( descriptionOf( matcher))
-        .append( "\n     but: ")
-        .append( mismatchFor( matcher, actual));
-
-      throw new AssertionError( mismatch.toString());
-      }
     }
 }

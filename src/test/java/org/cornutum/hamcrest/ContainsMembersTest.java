@@ -167,10 +167,10 @@ public class ContainsMembersTest
   public void matchesArray()
     {
     // Given...
-    String[] actual = new String[]{ "Green", "Blue", "Red"};
+    List<String> actual = Arrays.asList( "Green", "Blue", "Red");
     
     // When...
-    assertThatArray( "Arrays", actual, containsMembers( "Red", "Green", "Blue"));
+    assertThat( "Arrays", actual, containsMembers( "Red", "Green", "Blue"));
     }
 
   @Test
@@ -178,10 +178,10 @@ public class ContainsMembersTest
     {
     // Given...
     Iterator<String> expected = Arrays.asList( "Red", "Green", "Blue").iterator();
-    Iterator<String> actual = Arrays.asList( "Green", "Blue", "Red").iterator();
+    List<String> actual = Arrays.asList( "Green", "Blue", "Red");
     
     // When...
-    assertThatIterator( actual, containsMembers( expected));
+    assertThat( actual, containsMembers( expected));
     }
 
   @Test
@@ -189,11 +189,11 @@ public class ContainsMembersTest
     {
     // Given...
     Iterator<String> expected = Arrays.asList( "Red", "Green", "Blue").iterator();
-    Iterator<String> actual = Arrays.asList( "Green", "Blue", "Red", "White").iterator();
+    List<String> actual = Arrays.asList( "Green", "Blue", "Red", "White");
     
     // Then...
     expectFailure()
-      .when( () -> assertThatIterator( "Iterators", actual, containsMembers( expected)))
+      .when( () -> assertThat( "Iterators", actual, containsMembers( expected)))
       .then( failure ->
              assertThat(
                "Failure message",
