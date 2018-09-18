@@ -1,5 +1,9 @@
 # hamcrest-composites
 
+## What's New? ##
+
+  * The latest version (1.0.0) is now available at the [Maven Central Repository](https://search.maven.org/search?q=hamcrest-composites).
+
 ## What Is It? ##
 
 `hamcrest-composites` is a collection of [Hamcrest](https://github.com/hamcrest/JavaHamcrest) matchers for comparing complex Java objects with [better testability](#is-it-compatible-with-standard-hamcrest).
