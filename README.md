@@ -2,7 +2,8 @@
 
 ## What's New? ##
 
-  * The latest version (1.0.0) is now available at the [Maven Central Repository](https://search.maven.org/search?q=hamcrest-composites).
+  * The latest version ([1.1.0](https://github.com/Cornutum/hamcrest-composites/releases/tag/release-1.1.0))
+    is now available at the [Maven Central Repository](https://search.maven.org/search?q=hamcrest-composites).
 
 ## What Is It? ##
 
