@@ -83,25 +83,22 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
       </UL>
     </LI>
     <P/>
-    <LI><B>To match all members of an Iterable, regardless of order...</B>
+    <LI><B>To match all members of an iterable container, regardless of order...</B>
       <UL>
-        <LI> Use the <CODE><A href="ContainsMembers.html">ContainsMembers</A></CODE> matcher. </LI>
-        <LI> Even if the expected or matched Iterable may be <CODE>null</CODE>? No problem! </LI>
+        <LI> To match an Iterable, use the <CODE><A href="ContainsMembers.html">ContainsMembers</A></CODE> matcher. </LI>
+        <LI> To match an array, use the <CODE><A href="ContainsElements.html">ContainsElements</A></CODE> matcher. </LI>
+        <LI> To match an Iterator, use the <CODE><A href="VisitsMembers.html">VisitsMembers</A></CODE> matcher. </LI>
+        <LI> Even if the expected or matched container may be <CODE>null</CODE>? No problem! </LI>
         <LI> And also compare individual members using a composite matcher? No problem! </LI>
       </UL>
     </LI>
     <P/>
-    <LI><B>To match all elements of an array, regardless of order...</B>
+    <LI><B>To match all members of a sequence, in order...</B>
       <UL>
-        <LI> Use the <CODE><A href="ContainsElements.html">ContainsElements</A></CODE> matcher. </LI>
-        <LI> Even if the expected or matched array may be <CODE>null</CODE>? No problem! </LI>
-        <LI> And also compare elements using a composite matcher? No problem! </LI>
-      </UL>
-    </LI>
-    <P/> <LI><B>To match all objects supplied by an Iterator, regardless of order...</B>
-      <UL>
-        <LI> Use the <CODE><A href="VisitsMembers.html">VisitsMembers</A></CODE> matcher. </LI>
-        <LI> Even if the expected or matched Iterator may be <CODE>null</CODE>? No problem! </LI>
+        <LI> To match an Iterable, use the <CODE><A href="ListsMembers.html">ListsMembers</A></CODE> matcher. </LI>
+        <LI> To match an array, use the <CODE><A href="ListsElements.html">ListsElements</A></CODE> matcher. </LI>
+        <LI> To match an Iterator, use the <CODE><A href="VisitsList.html">VisitsList</A></CODE> matcher. </LI>
+        <LI> Even if the expected or matched sequence may be <CODE>null</CODE>? No problem! </LI>
         <LI> And also compare individual members using a composite matcher? No problem! </LI>
       </UL>
     </LI>

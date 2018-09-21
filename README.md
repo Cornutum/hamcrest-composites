@@ -65,13 +65,14 @@ Yes, `hamcrest-composites` is based on standard Hamcrest 1.3. But compared to th
 property-by-property. The problem is that every Matcher instance is bound to a specific expected value. But `BaseCompositeMatcher`, together with the `MatchesFunction`
 matcher, delays binding of property value matchers using "matcher supplier" functions.
 
-* **`ContainsMembers` vs. `IsIterableContainingInAnyOrder`:** Both of these matchers will verify that two Iterables contain the same set of members. But:
-    * `ContainsMembers` works even if either the expected or the matched Iterable is `null`.
-    * `ContainsMembers` accepts the members expected in multiple forms, using either an Iterable or an array or even an Iterator.
-    * `ContainsMembers` can optionally apply a member-specific composite matcher to perform a "deep match" on each individual member.
-    * `ContainsMembers` responds to a mismatch with a more concise and specific message, even in the case of deeply-nested collections.
+* **`ContainsMembers` vs. `IsIterableContainingInAnyOrder`:** Both of these matchers will verify that two Iterables contain the same set of members.
+Likewise, `ListsMembers` is similar to `IsIterableContainingInOrder`. But:
+    * `ContainsMembers` and `ListMembers` work even if either the expected or the matched Iterable is `null`.
+    * `ContainsMembers` and `ListMembers` accept the members expected in multiple forms, using either an Iterable or an array or even an Iterator.
+    * `ContainsMembers` and `ListMembers` can optionally apply a member-specific composite matcher to perform a "deep match" on each individual member.
+    * `ContainsMembers` and `ListMembers` respond to a mismatch with a more concise and specific message, even in the case of deeply-nested collections.
 
-* **Matchers for arrays and Iterators:** Sometimes collections come in different forms. `hamcrest-composites` provides matchers equivalent to `ContainsMembers` that
+* **Matchers for arrays and Iterators:** Sometimes collections come in different forms. `hamcrest-composites` provides matchers equivalent to `ContainsMembers` and `ListMembers` that
 can be used to verify the contents of arrays or Iterators.
 
 ## How Does It Work? ##
@@ -85,19 +86,18 @@ can be used to verify the contents of arrays or Iterators.
     * Use `valueOf()` to fluently define a [`MatchesFunction`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/MatchesFunction.html) matcher based on a property accessor. 
     * Use methods like `containsMembersMatching()`, etc. to fluently complete the matcher for a property of type Iterable, array, or Iterator. 
 
-* **To match all members of an Iterable, regardless of order...**
-    * Use the [`ContainsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsMembers.html) matcher. 
-    * Even if the expected or matched Iterable may be `null`? No problem! 
+* **To match all members of an iterable container, regardless of order...**
+    * To match an Iterable, use the [`ContainsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsMembers.html) matcher. 
+    * To match an array, use the [`ContainsElements`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsElements.html) matcher. 
+    * To match an Iterator, use the [`VisitsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsMembers.html) matcher. 
+    * Even if the expected or matched container may be `null`? No problem! 
     * And also compare individual members using a composite matcher? No problem! 
 
-* **To match all elements of an array, regardless of order...**
-    * Use the [`ContainsElements`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsElements.html) matcher. 
-    * Even if the expected or matched array may be `null`? No problem! 
-    * And also compare elements using a composite matcher? No problem! 
-
-* **To match all objects supplied by an Iterator, regardless of order...**
-    * Use the [`VisitsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsMembers.html) matcher. 
-    * Even if the expected or matched Iterator may be `null`? No problem! 
+* **To match all members of a sequence, in order...**
+    * To match an Iterable, use the [`ListsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsMembers.html) matcher. 
+    * To match an array, use the [`ListsElements`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsElements.html) matcher. 
+    * To match an Iterator, use the [`VisitsList`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsList.html) matcher. 
+    * Even if the expected or matched sequence may be `null`? No problem! 
     * And also compare individual members using a composite matcher? No problem! 
 
 <H2>Need More Examples?</H2>
@@ -109,6 +109,8 @@ For more examples of how to use composite matchers, see the unit tests for:
 * [`BaseCompositeMatcher`](src/test/java/org/cornutum/hamcrest/CompositeMatcherTest.java)
 * [`ContainsElements`](src/test/java/org/cornutum/hamcrest/ContainsElementsTest.java)
 * [`ContainsMembers`](src/test/java/org/cornutum/hamcrest/ContainsMembersTest.java)
+* [`ListsElements`](src/test/java/org/cornutum/hamcrest/ListsElementsTest.java)
+* [`ListsMembers`](src/test/java/org/cornutum/hamcrest/ListsMembersTest.java)
 * [`MatchesFunction`](src/test/java/org/cornutum/hamcrest/MatchesFunctionTest.java)
+* [`VisitsList`](src/test/java/org/cornutum/hamcrest/VisitsListTest.java)
 * [`VisitsMembers`](src/test/java/org/cornutum/hamcrest/VisitsMembersTest.java)
-
