@@ -203,6 +203,178 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   */
+  public static <T> Matcher<Iterable<T>> listsMembers( Iterable<? extends T> expected)
+    {
+    return new ListsMembers<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order), with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> listsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ListsMembers<T>( expected, memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterable<T>> listsMembers( T... expected)
+    {
+    return listsMembers( Arrays.asList( expected));
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order), with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterable<T>> listsMembers( Function<T,Matcher<T>> memberMatcherSupplier, T... expected)
+    {
+    return listsMembers( memberMatcherSupplier, Arrays.asList( expected));
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   */
+  public static <T> Matcher<Iterable<T>> listsMembers( Iterator<T> expected)
+    {
+    Iterable<T> iterable = () -> expected;
+    return listsMembers( iterable);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order), with
+   * an additional match condition: each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> listsMembers( Function<T,Matcher<T>> memberMatcherSupplier, Iterator<T> expected)
+    {
+    Iterable<T> iterable = () -> expected;
+    return listsMembers( memberMatcherSupplier, iterable);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order).
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> listsElements( T... expected)
+    {
+    return new ListsElements<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order), with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected array.
+   */
+  @SafeVarargs
+  public static <T> Matcher<T[]> listsElements( Function<T,Matcher<T>> elementMatcherSupplier, T... expected)
+    {
+    return new ListsElements<T>( expected, elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order).
+   */
+  public static <T> Matcher<T[]> listsElements( Iterable<? extends T> expected)
+    {
+    return new ListsElements<T>( toArray( expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order), with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected sequence.
+   */
+  public static <T> Matcher<T[]> listsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ListsElements<T>( toArray( expected), elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order).
+   */
+  public static <T> Matcher<T[]> listsElements( Iterator<T> expected)
+    {
+    return new ListsElements<T>( toArray( () -> expected));
+    }
+
+  /**
+   * Returns a Matcher for an array containing the given sequence of elements (in order), with
+   * an additional match condition: each element of a matched array must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected sequence.
+   */
+  public static <T> Matcher<T[]> listsElements( Function<T,Matcher<T>> elementMatcherSupplier, Iterator<T> expected)
+    {
+    return new ListsElements<T>( toArray( () -> expected), elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order).
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterator<T>> visitsList( T... expected)
+    {
+    return new VisitsList<T>( Arrays.asList( expected).iterator());
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order), with
+   * an additional match condition: each member of a matched sequence must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected sequence.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterator<T>> visitsList( Function<T,Matcher<T>> memberMatcherSupplier, T... expected)
+    {
+    return new VisitsList<T>( Arrays.asList( expected).iterator(), memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order).
+   */
+  public static <T> Matcher<Iterator<T>> visitsList( Iterable<? extends T> expected)
+    {
+    List<T> members = streamFor( expected).collect( toList());
+    return new VisitsList<T>( members.iterator());
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order), with
+   * an additional match condition: each member of a matched sequence must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected sequence.
+   */
+  public static <T> Matcher<Iterator<T>> visitsList( Function<T,Matcher<T>> memberMatcherSupplier, Iterable<? extends T> expected)
+    {
+    List<T> members = streamFor( expected).collect( toList());
+    return new VisitsList<T>( members.iterator(), memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order).
+   */
+  public static <T> Matcher<Iterator<T>> visitsList( Iterator<T> expected)
+    {
+    return new VisitsList<T>( expected);
+    }
+
+  /**
+   * Returns a Matcher for an Iterator that visits the given sequence of members (in order), with
+   * an additional match condition: each member of a matched sequence must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected sequence.
+   */
+  public static <T> Matcher<Iterator<T>> visitsList( Function<T,Matcher<T>> memberMatcherSupplier, Iterator<T> expected)
+    {
+    return new VisitsList<T>( expected, memberMatcherSupplier);
+    }
+
+  /**
    * Returns a Matcher that compares values of the given function, using a result Matcher returned by the given supplier.
    */
   public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)
