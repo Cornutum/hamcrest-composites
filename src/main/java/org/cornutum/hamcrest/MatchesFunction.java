@@ -87,7 +87,7 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
   /**
    * Builds and supplies a {@link MatchesFunction} matcher for a specified source object.
    */
-  public static class Supplier<T,R> implements Function<T,Matcher<T>>
+  public static class Supplier<T,R> implements Function<T,Matcher<? super T>>
     {
     private String functionName;
     private Function<T,R> function;

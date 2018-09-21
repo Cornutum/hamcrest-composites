@@ -29,7 +29,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   {
   private final T expected;
   private CompositeMatcher compositeMatcher;
-  private List<Matcher<T>> matchers;
+  private List<Matcher<? super T>> matchers;
 
   /**
    * Applies a sequence of Matchers to a single object.
@@ -37,7 +37,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   private class CompositeMatcher
     {
     private final Object matched;
-    private final Matcher<T> mismatch;
+    private final Matcher<? super T> mismatch;
     
     /**
      * Creates a new CompositeMatcher instance.
@@ -76,7 +76,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
     /**
      * Returns the first Matcher not satisfied by the {@link #getMatched matched} object.
      */
-    public Optional<Matcher<T>> getMismatch()
+    public Optional<Matcher<? super T>> getMismatch()
       {
       return Optional.ofNullable( mismatch);
       }
@@ -88,7 +88,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   protected BaseCompositeMatcher( T expected)
     {
     this.expected = expected;
-    this.matchers = new ArrayList<Matcher<T>>();
+    this.matchers = new ArrayList<Matcher<? super T>>();
     }
 
   public boolean matches( Object actual)
@@ -110,7 +110,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   /**
    * Adds the Matcher supplied for the expected object to the matchers applied by this Matcher.
    */
-  protected void expectThat( Function<T,Matcher<T>> matcherSupplier)
+  protected void expectThat( Function<T,Matcher<? super T>> matcherSupplier)
     {
     matchers.add( matcherSupplier.apply( expected));
     }
@@ -121,6 +121,14 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   protected <R> void expectThat( String functionName, Function<T,R> function, Function<R,Matcher<R>> resultMatcherSupplier)
     {
     matchers.add( new MatchesFunction<T,R>( functionName, function, expected, resultMatcherSupplier));
+    }
+
+  /**
+   * Decorates another Matcher supplier to provide a more expressive interface.
+   */
+  protected Function<T,Matcher<? super T>> matches( Function<T,Matcher<? super T>> matcherSupplier)
+    {
+    return matcherSupplier;
     }
 
   /**
@@ -175,7 +183,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   /**
    * Returns the first Matcher not satisfied by the last invocation of {@link #matches matches()}.
    */
-  private Optional<Matcher<T>> getMismatch()
+  private Optional<Matcher<? super T>> getMismatch()
     {
     return
       compositeMatcher == null
