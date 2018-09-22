@@ -69,15 +69,15 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
   <UL>
     <LI><B>To add composite matchers to an assertion...</B>
       <UL>
-        <LI> Use the static methods defined by the <CODE><A href="Composites.html">Composites</A></CODE> class. </LI>
+        <LI> Use the static methods defined by the <CODE><A href="org/cornutum/hamcrest/Composites.html">Composites</A></CODE> class. </LI>
       </UL>
     </LI>
     <P/>
     <LI><B>To match all properties of an object...</B>
       <UL>
-        <LI> Create a subclass of <CODE><A href="BaseCompositeMatcher.html">BaseCompositeMatcher</A></CODE>. </LI>
+        <LI> Create a subclass of <CODE><A href="org/cornutum/hamcrest/BaseCompositeMatcher.html">BaseCompositeMatcher</A></CODE>. </LI>
         <LI> Use <CODE>expectThat()</CODE> to add to the list of matchers applied to a matched <CODE>Drawing</CODE>. </LI>
-        <LI> Use <CODE>valueOf()</CODE> to fluently define a <CODE><A href="MatchesFunction.html">MatchesFunction</A></CODE> matcher based on a property accessor. </LI>
+        <LI> Use <CODE>valueOf()</CODE> to fluently define a <CODE><A href="org/cornutum/hamcrest/MatchesFunction.html">MatchesFunction</A></CODE> matcher based on a property accessor. </LI>
         <LI> Use methods like <CODE>containsMembersMatching()</CODE>, etc. to fluently complete the
           matcher for a property of type Iterable, array, or Iterator. </LI>
       </UL>
@@ -85,9 +85,9 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
     <P/>
     <LI><B>To match all members of an iterable container, regardless of order...</B>
       <UL>
-        <LI> To match an Iterable, use the <CODE><A href="ContainsMembers.html">ContainsMembers</A></CODE> matcher. </LI>
-        <LI> To match an array, use the <CODE><A href="ContainsElements.html">ContainsElements</A></CODE> matcher. </LI>
-        <LI> To match an Iterator, use the <CODE><A href="VisitsMembers.html">VisitsMembers</A></CODE> matcher. </LI>
+        <LI> To match an Iterable, use the <CODE><A href="org/cornutum/hamcrest/ContainsMembers.html">ContainsMembers</A></CODE> matcher. </LI>
+        <LI> To match an array, use the <CODE><A href="org/cornutum/hamcrest/ContainsElements.html">ContainsElements</A></CODE> matcher. </LI>
+        <LI> To match an Iterator, use the <CODE><A href="org/cornutum/hamcrest/VisitsMembers.html">VisitsMembers</A></CODE> matcher. </LI>
         <LI> Even if the expected or matched container may be <CODE>null</CODE>? No problem! </LI>
         <LI> And also compare individual members using a composite matcher? No problem! </LI>
       </UL>
@@ -95,9 +95,9 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
     <P/>
     <LI><B>To match all members of a sequence, in order...</B>
       <UL>
-        <LI> To match an Iterable, use the <CODE><A href="ListsMembers.html">ListsMembers</A></CODE> matcher. </LI>
-        <LI> To match an array, use the <CODE><A href="ListsElements.html">ListsElements</A></CODE> matcher. </LI>
-        <LI> To match an Iterator, use the <CODE><A href="VisitsList.html">VisitsList</A></CODE> matcher. </LI>
+        <LI> To match an Iterable, use the <CODE><A href="org/cornutum/hamcrest/ListsMembers.html">ListsMembers</A></CODE> matcher. </LI>
+        <LI> To match an array, use the <CODE><A href="org/cornutum/hamcrest/ListsElements.html">ListsElements</A></CODE> matcher. </LI>
+        <LI> To match an Iterator, use the <CODE><A href="org/cornutum/hamcrest/VisitsList.html">VisitsList</A></CODE> matcher. </LI>
         <LI> Even if the expected or matched sequence may be <CODE>null</CODE>? No problem! </LI>
         <LI> And also compare individual members using a composite matcher? No problem! </LI>
       </UL>
