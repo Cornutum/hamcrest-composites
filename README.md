@@ -14,6 +14,8 @@ more thorough, easier to express, and easier to debug.
 
 ## Why Composite Matchers? ##
 
+With standard Hamcrest, verifying that two objects are `equals` is easy. But comparing the full tree of object property values is much more involved and not directly supported. Although such "deep matching" is needed for testing, it's often impossible (and almost always wrong!) to implement it using `equals`. Instead, `hamcrest-composites` makes it much easier to implement deep matching using a "composite matcher". Similarly, because standard Hamcrest has always been a bit weak for comparing collections and arrays, `hamcrest-composites` adds more robust matchers for all types of iterable containers.
+
 Consider the case of a [`Drawing`](src/test/java/org/cornutum/hamcrest/Drawing.java) object that contains a collection of
 `Shape` instances, each of which has complex properties, such as a `Color`. Consider the tests for a system that manipulates `Drawing` objects.
 How would a test verify that a `Drawing` produced by the system contains *all* of the expected content? With `hamcrest-composites`, it can be
