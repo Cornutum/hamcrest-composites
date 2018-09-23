@@ -168,6 +168,33 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
     }
 
   /**
+   * Returns a new {@link ListsMembers.Supplier} that supplies a {@link ListsMembers} matcher using
+   * the given member Matcher supplier.
+   */
+  protected static <T,S extends Iterable<T>> ListsMembers.Supplier<T,S> listsMembersMatching( Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    return new ListsMembers.Supplier<>( memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a new {@link ListsElements.Supplier} that supplies a {@link ListsElements} matcher using
+   * the given element Matcher supplier.
+   */
+  protected static <T> ListsElements.Supplier<T> listsElementsMatching( Function<T,Matcher<T>> elementMatcherSupplier)
+    {
+    return new ListsElements.Supplier<>( elementMatcherSupplier);
+    }
+
+  /**
+   * Returns a new {@link VisitsList.Supplier} that supplies a {@link VisitsList} matcher using
+   * the given member Matcher supplier.
+   */
+  protected static <T> VisitsList.Supplier<T> visitsListMatching( Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    return new VisitsList.Supplier<>( memberMatcherSupplier);
+    }
+
+  /**
    * Returns the CompositeMatcher for the given actual object
    */
   private CompositeMatcher getCompositeMatcher( Object actual)
