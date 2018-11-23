@@ -85,7 +85,7 @@ can be used to verify the contents of arrays or Iterators.
 
 * **To match all properties of an object...**
     * Create a subclass of [`BaseCompositeMatcher`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/BaseCompositeMatcher.html). 
-    * Use `expectThat()` to add to the list of matchers applied to a matched `Drawing`. 
+    * Use `expectThat()` to add to the list of matchers applied to a matched object. 
     * Use `valueOf()` to fluently define a [`MatchesFunction`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/MatchesFunction.html) matcher based on a property accessor. 
     * Use methods like `containsMembersMatching()`, etc. to fluently complete the matcher for a property of type Iterable, array, or Iterator. 
 

@@ -4,7 +4,7 @@
     <TITLE>Hamcrest Composites API</TITLE>
 </HEAD>
 <BODY>
-  Provide Matchers for comparing complex Java objects with better testability.
+  Provides Matchers for comparing complex Java objects with better testability.
 
   <H2>What Is It?</H2>
 
@@ -85,7 +85,7 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
     <LI><B>To match all properties of an object...</B>
       <UL>
         <LI> Create a subclass of <CODE><A href="org/cornutum/hamcrest/BaseCompositeMatcher.html">BaseCompositeMatcher</A></CODE>. </LI>
-        <LI> Use <CODE>expectThat()</CODE> to add to the list of matchers applied to a matched <CODE>Drawing</CODE>. </LI>
+        <LI> Use <CODE>expectThat()</CODE> to add to the list of matchers applied to a matched object. </LI>
         <LI> Use <CODE>valueOf()</CODE> to fluently define a <CODE><A href="org/cornutum/hamcrest/MatchesFunction.html">MatchesFunction</A></CODE> matcher based on a property accessor. </LI>
         <LI> Use methods like <CODE>containsMembersMatching()</CODE>, etc. to fluently complete the
           matcher for a property of type Iterable, array, or Iterator. </LI>
