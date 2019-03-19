@@ -78,6 +78,11 @@ public class ExpectedFailure<T extends Throwable>
     return expectFailure( AssertionError.class);
     }
 
+  public String toString()
+    {
+    return String.format( "%s[%s]", getClass().getSimpleName(), failureType.getSimpleName());
+    }
+
   /**
    * Implements an action that could throw any type of Throwable, including a checked exception.
    */

@@ -84,4 +84,9 @@ public class VisitsMembers<T> extends BaseMatcher<Iterator<T>>
     {
     containsMembers.describeMismatch( actual, description);
     }
+
+  public String toString()
+    {
+    return String.format( "%s[]", getClass().getSimpleName());
+    }
   }

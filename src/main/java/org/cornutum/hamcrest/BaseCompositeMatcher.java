@@ -80,6 +80,11 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
       {
       return Optional.ofNullable( mismatch);
       }
+
+    public String toString()
+      {
+      return String.format( "%s[%s]", getClass().getSimpleName(), BaseCompositeMatcher.this.getClass().getSimpleName());
+      }
     }
    
   /**
@@ -216,5 +221,10 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
       compositeMatcher == null
       ? Optional.empty()
       : compositeMatcher.getMismatch();
+    }
+
+  public String toString()
+    {
+    return String.format( "%s[]", getClass().getSimpleName());
     }
   }

@@ -61,7 +61,12 @@ public class ListsMembers<T> extends BaseMatcher<Iterable<T>>
     public Matcher<T> getMatcher()
       {
       return matcher;
-      }    
+      }
+
+    public String toString()
+      {
+      return String.format( "%s[actual=%s, matcher=%s]", getClass().getSimpleName(), actualMember, matcher);
+      }
     }
 
   /**
@@ -207,6 +212,11 @@ public class ListsMembers<T> extends BaseMatcher<Iterable<T>>
       {
       return Optional.ofNullable( memberMismatch);
       }
+
+    public String toString()
+      {
+      return String.format( "%s[%s]", getClass().getSimpleName(), ListsMembers.this.getClass().getSimpleName());
+      }
     }
  
   /**
@@ -288,5 +298,10 @@ public class ListsMembers<T> extends BaseMatcher<Iterable<T>>
       memberMatcher == null
       ? Optional.empty()
       : memberMatcher.getMemberMismatch();
+    }
+
+  public String toString()
+    {
+    return String.format( "%s[]", getClass().getSimpleName());
     }
   }

@@ -85,4 +85,9 @@ public class ContainsElements<T> extends BaseMatcher<T[]>
     {
     containsMembers.describeMismatch( actual, description);
     }
+
+  public String toString()
+    {
+    return String.format( "%s[]", getClass().getSimpleName());
+    }
   }

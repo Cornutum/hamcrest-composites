@@ -82,6 +82,11 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
         ? Optional.of( mismatch.toString())
         : Optional.empty();
       }
+
+    public String toString()
+      {
+      return String.format( "%s[%s]", getClass().getSimpleName(), functionName);
+      }
     }
 
   /**
@@ -217,5 +222,10 @@ public class MatchesFunction<T,R> extends BaseMatcher<T>
       }
 
     return functionMatcher;
+    }
+
+  public String toString()
+    {
+    return String.format( "%s[%s]", getClass().getSimpleName(), functionName);
     }
   }

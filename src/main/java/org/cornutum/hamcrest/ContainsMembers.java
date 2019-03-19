@@ -61,7 +61,12 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
     public Matcher<T> getMatcher()
       {
       return matcher;
-      }    
+      }
+
+    public String toString()
+      {
+      return String.format( "%s[actual=%s, matcher=%s]", getClass().getSimpleName(), actualMember, matcher);
+      }
     }
 
   /**
@@ -235,6 +240,11 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
         .map( m -> String.valueOf(m))
         .reduce( "", (list, m) -> list + (list.isEmpty()? "" : ", ") + m);
       }
+
+    public String toString()
+      {
+      return String.format( "%s[%s]", getClass().getSimpleName(), ContainsMembers.this.getClass().getSimpleName());
+      }
     }
  
   /**
@@ -316,5 +326,10 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
       memberMatcher == null
       ? Optional.empty()
       : memberMatcher.getMemberMismatch();
+    }
+
+  public String toString()
+    {
+    return String.format( "%s[]", getClass().getSimpleName());
     }
   }
