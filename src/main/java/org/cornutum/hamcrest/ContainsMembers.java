@@ -125,7 +125,7 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
       else if( actual != null)
         {
         // Comparing to an actual Iterable?
-        Iterable<T> actualMembers =
+        Iterable<T> actualIterable =
           Iterable.class.isInstance( actual)?
           (Iterable<T>) actual :
 
@@ -137,12 +137,15 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
           
           null;
 
-        if( actualMembers == null)
+        if( actualIterable == null)
           {
           iterableMismatch = "was not an Iterable";
           }
         else
           {
+          // Must collect the actual members in advance to prepare for multiple matching traversals.
+          List<T> actualMembers = streamFor( actualIterable).collect( toList());
+
           // Are actual members a 1-to-1 "equals" match for expected members?
           List<T> unmatched = new ArrayList<>( expectedMembers);
           List<T> unexpected = new ArrayList<>();

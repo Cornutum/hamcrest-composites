@@ -7,7 +7,10 @@
 
 package org.cornutum.hamcrest;
 
+import org.cornutum.hamcrest.Drawing.DrawingMatcher;
 import static org.cornutum.hamcrest.Composites.*;
+import static org.cornutum.hamcrest.Drawing.*;
+import static org.cornutum.hamcrest.Drawing.Color.*;
 import static org.cornutum.hamcrest.ExpectedFailure.*;
 
 import org.junit.Test;
@@ -126,5 +129,36 @@ public class VisitsMembersTest
                    "Expected: Iterable with 5 members",
                    "but: was missing 1 members=[Green]",
                    "and: had 1 unexpected members=[Yellow]"))));
+    }
+
+  @Test
+  public void matchesMemberMatcher_fails()
+    {
+    // Given...
+    Iterator<Drawing> expected =
+      Arrays.asList(
+        new Drawing( "Greens", triangle( GREEN), circle( GREEN), rectangle( GREEN)),
+        new Drawing( "Blues", rectangle( BLUE), circle( BLUE), triangle( BLUE)),
+        new Drawing( "Reds", circle( RED), triangle( RED), rectangle( RED)))
+      .iterator();
+
+    Iterator<Drawing> actual =
+      Arrays.asList(
+        new Drawing( "Greens", triangle( GREEN), circle( GREEN), rectangle( GREEN)),
+        new Drawing( "Blues", rectangle( BLUE), circle( RED), triangle( BLUE)),
+        new Drawing( "Reds", circle( RED), triangle( RED), rectangle( RED)))
+      .iterator();
+    
+    // Then...
+    expectFailure()
+      .when( () -> assertThat( "Member matchers", actual, visitsMembers( DrawingMatcher::new, expected)))
+      .then( failure ->
+             assertThat(
+               "Failure message",
+               failure.getMessage(),
+               stringContainsInOrder(
+                 Arrays.asList(
+                   "Expected: Iterable containing Drawing[Blues] matching elements=Iterable containing CIRCLE[Color[0,0,255]] matching color=<Color[0,0,255]>",
+                   "but: was <Color[255,0,0]>"))));
     }
   }
