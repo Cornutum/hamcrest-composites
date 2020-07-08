@@ -7,7 +7,7 @@
     <groupId>org.cornutum.testing</groupId>
     <artifactId>hamcrest-composites</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <name>Hamcrest Composites</name>
     <description>Better testability for comparision of complex Java objects</description>
