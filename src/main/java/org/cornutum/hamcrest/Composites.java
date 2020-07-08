@@ -375,6 +375,38 @@ public final class Composites
     }
 
   /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   * Each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> listsMatching( Function<T,Matcher<T>> memberMatcherSupplier, Iterable<? extends T> expected)
+    {
+    return new ListsMatching<T>( expected, memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   * Each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  @SafeVarargs
+  public static <T> Matcher<Iterable<T>> listsMatching( Function<T,Matcher<T>> memberMatcherSupplier, T... expected)
+    {
+    return listsMatching( memberMatcherSupplier, Arrays.asList( expected));
+    }
+
+  /**
+   * Returns a Matcher for an Iterable containing the given sequence of members (in order).
+   * Each member of a matched Iterable must satisfy the Matcher returned 
+   * by the given supplier for its counterpart in the given expected Iterable.
+   */
+  public static <T> Matcher<Iterable<T>> listsMatching( Function<T,Matcher<T>> memberMatcherSupplier, Iterator<T> expected)
+    {
+    Iterable<T> iterable = () -> expected;
+    return listsMatching( memberMatcherSupplier, iterable);
+    }
+
+  /**
    * Returns a Matcher that compares values of the given function, using a result Matcher returned by the given supplier.
    */
   public static <T,R> Matcher<T> matchesFunction( String functionName, Function<T,R> function, T source, Function<R,Matcher<R>> resultMatcherSupplier)

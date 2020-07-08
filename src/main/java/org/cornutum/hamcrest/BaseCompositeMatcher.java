@@ -37,7 +37,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   private class CompositeMatcher
     {
     private final Object matched;
-    private final Matcher<? super T> mismatch;
+    private Matcher<? super T> mismatch;
     
     /**
      * Creates a new CompositeMatcher instance.
@@ -54,7 +54,7 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
           ? new IsNull<T>()
           : new IsNot<T>( new IsNull<T>());
         }
-      else
+      else if( (mismatch = getTypeMismatch( object)) == null)
         {
         T actual = (T) object;
         mismatch =
@@ -110,6 +110,16 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   public void describeMismatch( Object actual, Description description)
     {
     getCompositeMatcher( actual).getMismatch().ifPresent( m -> m.describeMismatch( actual, description));
+    }
+
+  /**
+   * If the given object is incompatible with the expected type, returns a Matcher that describes the mismatch.
+   * Otherwise, return null;
+   */
+  protected Matcher<? super T> getTypeMismatch( Object object)
+    {
+    // By default, the expected type is undefined. Successful cast of the given object is assumed.
+    return null;
     }
 
   /**
@@ -179,6 +189,15 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
   protected static <T,S extends Iterable<T>> ListsMembers.Supplier<T,S> listsMembersMatching( Function<T,Matcher<T>> memberMatcherSupplier)
     {
     return new ListsMembers.Supplier<>( memberMatcherSupplier);
+    }
+
+  /**
+   * Returns a new {@link ListsMatching.Supplier} that supplies a {@link ListsMatching} matcher using
+   * the given member Matcher supplier.
+   */
+  protected static <T,S extends Iterable<T>> ListsMatching.Supplier<T,S> listsMatching( Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    return new ListsMatching.Supplier<>( memberMatcherSupplier);
     }
 
   /**

@@ -100,6 +100,7 @@ can be used to verify the contents of arrays or Iterators.
     * To match an Iterable, use the [`ListsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsMembers.html) matcher. 
     * To match an array, use the [`ListsElements`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsElements.html) matcher. 
     * To match an Iterator, use the [`VisitsList`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsList.html) matcher. 
+    * Without using `equals`, use the [`ListsMatching`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsMatching.html) matcher. 
     * Even if the expected or matched sequence may be `null`? No problem! 
     * And also compare individual members using a composite matcher? No problem! 
 
@@ -114,6 +115,7 @@ For more examples of how to use composite matchers, see the unit tests for:
 * [`ContainsMembers`](src/test/java/org/cornutum/hamcrest/ContainsMembersTest.java)
 * [`ListsElements`](src/test/java/org/cornutum/hamcrest/ListsElementsTest.java)
 * [`ListsMembers`](src/test/java/org/cornutum/hamcrest/ListsMembersTest.java)
+* [`ListsMatching`](src/test/java/org/cornutum/hamcrest/ListsMatchingTest.java)
 * [`MatchesFunction`](src/test/java/org/cornutum/hamcrest/MatchesFunctionTest.java)
 * [`VisitsList`](src/test/java/org/cornutum/hamcrest/VisitsListTest.java)
 * [`VisitsMembers`](src/test/java/org/cornutum/hamcrest/VisitsMembersTest.java)
