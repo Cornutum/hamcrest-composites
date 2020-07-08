@@ -29,9 +29,9 @@ import static java.util.stream.Collectors.toList;
  * given supplier function.  Then each member of a matched Iterable must satisfy the member-specific
  * Matcher returned for its counterpart in the given expected Iterable.
  * <P/>
- * Unlike the {@link ListMembers} matcher, this matcher does not attempt to compare members using <CODE>equals()</CODE>.
- * The {@link ListMembers} matcher is preferred when <CODE>equals</CODE> methods are defined based on a few "primary key" fields.
- * In other cases, this matcher may provide better descriptions of match failures. But, unlike {@link ListMembers},
+ * Unlike the {@link org.cornutum.hamcrest.ListsMembers} matcher, this matcher does not attempt to compare members using <CODE>equals()</CODE>.
+ * The {@link org.cornutum.hamcrest.ListsMembers} matcher is preferred when member <CODE>equals</CODE> methods are defined based on a few "primary key" fields.
+ * In other cases, this matcher may provide a more precise description of match failures. But, unlike {@link org.cornutum.hamcrest.ListsMembers},
  * this matcher cannot always verify that an expected member is missing or that an actual member does not belong.
  */
 public class ListsMatching<T> extends BaseMatcher<Iterable<T>>
