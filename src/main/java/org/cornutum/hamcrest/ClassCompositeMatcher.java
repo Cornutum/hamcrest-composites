@@ -52,5 +52,10 @@ public abstract class ClassCompositeMatcher<T> extends BaseCompositeMatcher<T>
       : new IsInstanceOf( getExpectedType());
     }
 
+  public String toString()
+    {
+    return String.format( "%s[%s]", getClass().getSimpleName(), getExpectedType().getSimpleName());
+    }
+  
   private Class<? extends T> expectedType;
   }
