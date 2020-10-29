@@ -9,6 +9,7 @@ package org.cornutum.hamcrest;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -30,12 +31,22 @@ public class ExpectedFailure<T extends Throwable>
   /**
    * Throws an AssertionError if the expected Throwable is not thrown by the given action.
    */
-  @SuppressWarnings("unchecked")
   public ExpectedFailure<T> when( Failable action)
+    {
+    return when( action, Function.identity());
+    }
+
+  /**
+   * Throws an AssertionError if the expected Throwable is not thrown by the given action.
+   * The expected Throwable is defined by applying the <CODE>failureMapper</CODE> to the
+   * Throwable produced by the action.
+   */
+  @SuppressWarnings("unchecked")
+  public ExpectedFailure<T> when( Failable action, Function<Throwable,Throwable> failureMapper)
     {
     expected = Optional.empty();
 
-    Throwable failure = action.get().orElse( null);
+    Throwable failure = action.get().map( t -> failureMapper.apply(t)).orElse( null);
     if( failure == null)
       {
       throw new AssertionError( "Expected " + failureType.getSimpleName() + " was not thrown");
