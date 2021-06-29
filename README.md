@@ -1,8 +1,11 @@
 # hamcrest-composites
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.cornutum.testing/hamcrest-composites/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/org.cornutum.testing/hamcrest-composites)
+[![javadoc](https://javadoc.io/badge2/org.cornutum.testing/hamcrest-composites/javadoc.svg?style=plastic)](https://javadoc.io/doc/org.cornutum.testing/hamcrest-composites)
+
 ## What's New? ##
 
-  * The latest version ([1.2.1](https://github.com/Cornutum/hamcrest-composites/releases/tag/release-1.2.1))
+  * The latest version ([1.2.2](https://github.com/Cornutum/hamcrest-composites/releases/tag/release-1.2.2))
     is now available at the [Maven Central Repository](https://search.maven.org/search?q=hamcrest-composites).
 
 ## What Is It? ##
@@ -62,7 +65,7 @@ Expected: Drawing[Blues] matching elements=Iterable containing CIRCLE matching c
 ```
 ## Is It Compatible with Standard Hamcrest? ##
 
-Yes, `hamcrest-composites` is based on standard Hamcrest 1.3. But compared to the standard Hamcrest, it offers several improvements.
+Yes, `hamcrest-composites` is based on standard Hamcrest 2.2. But compared to the standard Hamcrest, it offers several improvements.
 
 * **The concept of "composite matcher" is new:** There is nothing like it in standard Hamcrest. What's new is a single Matcher class that will compare *any two* class instances
 property-by-property. The problem is that every Matcher instance is bound to a specific expected value. But `BaseCompositeMatcher`, together with the `MatchesFunction`
