@@ -219,6 +219,24 @@ public abstract class BaseCompositeMatcher<T> extends BaseMatcher<T>
     }
 
   /**
+   * Returns a new {@link ContainsEntries.Supplier} that supplies a {@link ContainsEntries} matcher that
+   * matches entries using the given value Matcher supplier.
+   */
+  protected static <K,V> ContainsEntries.Supplier<K,V> containsEntriesMatching( Function<V,Matcher<V>> valueMatcherSupplier)
+    {
+    return new ContainsEntries.Supplier<>( valueMatcherSupplier);
+    }
+
+  /**
+   * Returns a new {@link ContainsEntries.Supplier} that supplies a {@link ContainsEntries} matcher that
+   * matches entries using the given key and value Matcher suppliers.
+   */
+  protected static <K,V> ContainsEntries.Supplier<K,V> containsEntriesMatching( Function<K,Matcher<K>> keyMatcherSupplier, Function<V,Matcher<V>> valueMatcherSupplier)
+    {
+    return new ContainsEntries.Supplier<>( keyMatcherSupplier, valueMatcherSupplier);
+    }
+
+  /**
    * Returns the CompositeMatcher for the given actual object
    */
   private CompositeMatcher getCompositeMatcher( Object actual)

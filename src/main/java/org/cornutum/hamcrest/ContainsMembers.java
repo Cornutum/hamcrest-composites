@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
   {
+  private final String iterableDescription;
   private final List<T> expectedMembers;
   private final Function<T,Matcher<T>> memberMatcherSupplier;
   private MemberMatcher memberMatcher;
@@ -77,7 +78,7 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
     private Function<T,Matcher<T>> memberMatcherSupplier;
     
     /**
-     * Creates a new ContainsMembersSupplier that supplies a {@link ContainsMembers} matcher using
+     * Creates a new Supplier that supplies a {@link ContainsMembers} matcher using
      * the given member Matcher supplier.
      */
     public Supplier( Function<T,Matcher<T>> memberMatcherSupplier)
@@ -265,6 +266,21 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
    */
   public ContainsMembers( Iterable<? extends T> expected, Function<T,Matcher<T>> memberMatcherSupplier)
     {
+    this( null, expected, memberMatcherSupplier);
+    }
+ 
+  /**
+   * Creates a new ContainsMembers instance that adds an additional match condition: each member of a
+   * matched Iterable must satisfy the Matcher returned by the given supplier for its <CODE>equals</CODE>-matching 
+   * counterpart in the given expected Iterable.
+   */
+  public ContainsMembers( String iterableDescription, Iterable<? extends T> expected, Function<T,Matcher<T>> memberMatcherSupplier)
+    {
+    this.iterableDescription =
+      iterableDescription == null
+      ? "Iterable"
+      : iterableDescription;
+    
     this.memberMatcherSupplier = memberMatcherSupplier;
     
     expectedMembers =
@@ -285,9 +301,9 @@ public class ContainsMembers<T> extends BaseMatcher<Iterable<T>>
       "null" :
 
       getMemberMismatch()
-      .map( m -> "Iterable containing " + descriptionOf( m.getMatcher()))
+      .map( m -> iterableDescription + " containing " + descriptionOf( m.getMatcher()))
       
-      .orElse( "Iterable with " + expectedMembers.size() + " members"));
+      .orElse( iterableDescription + " with " + expectedMembers.size() + " members"));
     }
 
   public void describeMismatch( Object actual, Description description)

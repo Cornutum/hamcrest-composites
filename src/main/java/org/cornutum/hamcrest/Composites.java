@@ -12,6 +12,7 @@ import static org.cornutum.hamcrest.CompositeUtils.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
 
@@ -404,6 +405,32 @@ public final class Composites
     {
     Iterable<T> iterable = () -> expected;
     return listsMatching( memberMatcherSupplier, iterable);
+    }
+
+  /**
+   * Returns a Matcher for the expected Map.
+   */
+  public static <K,V> Matcher<Map<K,V>> containsEntries( Map<K,V> expected)
+    {
+    return new ContainsEntries<>( expected);
+    }
+
+  /**
+   * Returns a Matcher for the expected Map, matching each entry with its expected counterpart using
+   * the value Matcher returned by the given supplier.
+   */
+  public static <K,V> Matcher<Map<K,V>> containsEntries( Function<V,Matcher<V>> valueMatcherSupplier, Map<K,V> expected)
+    {
+    return new ContainsEntries<>( expected, new MapEntryMatcher.Supplier<K,V>( valueMatcherSupplier));
+    }
+
+  /**
+   * Returns a Matcher for the expected Map, matching each entry with its expected counterpart using
+   * the key and value Matchers returned by the given suppliers.
+   */
+  public static <K,V> Matcher<Map<K,V>> containsEntries( Function<K,Matcher<K>> keyMatcherSupplier, Function<V,Matcher<V>> valueMatcherSupplier, Map<K,V> expected)
+    {
+    return new ContainsEntries<>( expected, new MapEntryMatcher.Supplier<K,V>( keyMatcherSupplier, valueMatcherSupplier));
     }
 
   /**
