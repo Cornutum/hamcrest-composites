@@ -5,7 +5,7 @@
 
 ## What's New? ##
 
-  * The latest version ([1.2.2](https://github.com/Cornutum/hamcrest-composites/releases/tag/release-1.2.2))
+  * The latest version ([1.3.0](https://github.com/Cornutum/hamcrest-composites/releases/tag/release-1.3.0))
     is now available at the [Maven Central Repository](https://search.maven.org/search?q=hamcrest-composites).
 
 ## What Is It? ##
@@ -81,6 +81,8 @@ Likewise, `ListsMembers` is similar to `IsIterableContainingInOrder`. But:
 * **Matchers for arrays and Iterators:** Sometimes collections come in different forms. `hamcrest-composites` provides matchers equivalent to `ContainsMembers` and `ListMembers` that
 can be used to verify the contents of arrays or Iterators.
 
+* **Deep matching for Maps:** Use the `ContainsEntries` matcher to compare Map objects, comparing expected and matched map entries using specified key and value matchers.
+
 ## How Does It Work? ##
 
 * **To add composite matchers to an assertion...**
@@ -91,6 +93,7 @@ can be used to verify the contents of arrays or Iterators.
     * Use `expectThat()` to add to the list of matchers applied to a matched object. 
     * Use `valueOf()` to fluently define a [`MatchesFunction`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/MatchesFunction.html) matcher based on a property accessor. 
     * Use methods like `containsMembersMatching()`, etc. to fluently complete the matcher for a property of type Iterable, array, or Iterator. 
+    * Use `containsEntriesMatching()`, etc. to fluently complete the matcher for a property of type Map. 
 
 * **To match all members of an iterable container, regardless of order...**
     * To match an Iterable, use the [`ContainsMembers`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsMembers.html) matcher. 
@@ -105,7 +108,15 @@ can be used to verify the contents of arrays or Iterators.
     * To match an Iterator, use the [`VisitsList`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/VisitsList.html) matcher. 
     * Without using `equals()`, use the [`ListsMatching`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ListsMatching.html) matcher. 
     * Even if the expected or matched sequence may be `null`? No problem! 
-    * And also compare individual members using a composite matcher? No problem! 
+    * And also compare individual members using a composite matcher? No problem!
+
+* **To match Map entries...**
+    * Use the [`ContainsEntries`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/ContainsEntries.html) matcher.
+    * Even if the expected or matched Map may be `null`? No problem! 
+    * Compare map entries using a [`MapEntryMatcher`](http://www.cornutum.org/hamcrest-composites/apidocs/org/cornutum/hamcrest/MapEntryMatcher.html).
+      You can easily construct one using a `MapEntryMatcher.Supplier`, specifying a value matcher and (optionally) a key matcher. The default
+      key matcher is `equalTo`.
+
 
 <H2>Need More Examples?</H2>
 
@@ -122,3 +133,4 @@ For more examples of how to use composite matchers, see the unit tests for:
 * [`MatchesFunction`](src/test/java/org/cornutum/hamcrest/MatchesFunctionTest.java)
 * [`VisitsList`](src/test/java/org/cornutum/hamcrest/VisitsListTest.java)
 * [`VisitsMembers`](src/test/java/org/cornutum/hamcrest/VisitsMembersTest.java)
+* [`ContainsEntries`](src/test/java/org/cornutum/hamcrest/ContainsEntriesTest.java)
